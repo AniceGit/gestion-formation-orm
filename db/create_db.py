@@ -4,6 +4,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from sqlmodel import SQLModel, create_engine
 from database import engine
 from models.room import Room
+from models.session import Session
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
