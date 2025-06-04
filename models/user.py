@@ -1,4 +1,4 @@
-from sqlmodel import Field, SQLModel, create_engine
+from sqlmodel import Field, SQLModel
 from enum import Enum
 import datetime as date
 
@@ -11,6 +11,7 @@ class UserRole(str, Enum):
 
 
 class User(SQLModel, table=False):
+    __tablename__ = "user"
     id: int | None = Field(default=None, primary_key=True)
     name: str  # required field
     firstname: str  # required field
