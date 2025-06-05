@@ -1,4 +1,4 @@
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, create_engine
 from datetime import date
 from enum import Enum
 from typing import Optional
@@ -12,6 +12,7 @@ class StatusEnum(str, Enum):
 
 
 class Session(SQLModel, table=True):
+    __tablename__ = "session"
     id_session: int = Field(default=None, primary_key=True)
     title: str = Field(max_length=100)
     description: Optional[str] = None

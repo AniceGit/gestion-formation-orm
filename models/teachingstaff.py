@@ -1,6 +1,6 @@
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, create_engine
 from enum import Enum
-import datetime as date
+from datetime import date
 
 
 class TeachingStaffRole(str, Enum):
@@ -8,8 +8,8 @@ class TeachingStaffRole(str, Enum):
     PROJECT_HANDLER = "CHARGEE DE PROJET"
 
 
-class TeachingStaff(SQLModel, table=False):
-    __tablename__ = "user"
+class TeachingStaff(SQLModel, table=True):
+    __tablename__ = "teaching_staff"
     id: int = Field(default=None, primary_key=True)
     id_user: int = Field(foreign_key="user.id")
     work: TeachingStaffRole  # required field
