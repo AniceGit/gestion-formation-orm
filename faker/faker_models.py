@@ -1,4 +1,5 @@
 import faker as fk
+from config import NBR_ADMIN,NBR_INSCRIPTION,NBR_LEARNER,NBR_ROOM,NBR_SESSION,NBR_TEACHINGSTAFF,NBR_TRAINER
 from models.admin import Admin
 from models.inscription import Inscription
 from models.learner import Learner
@@ -10,10 +11,14 @@ from models.user import User
 
 faker = fk.Faker()
 
+# function used several times
 def random_element_list(liste):
     return liste[faker.pyint(0, len(liste) -1)]
 
-def generate_fake_admin(nb_admins: int) -> list[Admin]:
+
+#region admin
+
+def generate_fake_admin(nb_admins: int = NBR_ADMIN) -> list[Admin]:
     list_result = []
     for _ in range(nb_admins):
         admin = Admin(
@@ -25,7 +30,9 @@ def generate_fake_admin(nb_admins: int) -> list[Admin]:
     return list_result
 
 
-def generate_fake_inscription(nb_inscriptions) -> list[Inscription]:
+#region inscription
+
+def generate_fake_inscription(nb_inscriptions: int = NBR_INSCRIPTION) -> list[Inscription]:
     list_result = []
     list_status = ["ENREGISTRE", "DESINSCRIT", "EN_ATTENTE"]
     for _ in range(nb_inscriptions):
@@ -38,6 +45,9 @@ def generate_fake_inscription(nb_inscriptions) -> list[Inscription]:
         )
         list_result.append(inscription)
     return list_result
+
+
+#region learner
 
 def generate_fake_learner(nb_learners):
     list_result = []
@@ -52,6 +62,9 @@ def generate_fake_learner(nb_learners):
         list_result.append(learner)
     return list_result
 
+
+#region room
+
 def generate_fake_room(nb_rooms):
     list_result = []
     for _ in range(nb_rooms):
@@ -64,6 +77,9 @@ def generate_fake_room(nb_rooms):
         )
         list_result.append(room)
     return list_result
+
+
+#region session
 
 def generate_fake_session(nb_sessions):
     list_result = []
@@ -83,6 +99,9 @@ def generate_fake_session(nb_sessions):
         list_result.append(session)
     return list_result
 
+
+#region teachin
+
 def generate_fake_teachingstaff(nb_teachingstaff):
     list_result = []
     list_role = ["RESPONSABLE PEDAGOGIQUE", "RESPONSABLE PEDAGOGIQUE"]
@@ -96,6 +115,9 @@ def generate_fake_teachingstaff(nb_teachingstaff):
         list_result.append(teachingStaff)
     return list_result
 
+
+#region trainer
+
 def generate_fake_trainer(nb_trainers):
     list_result = []
     for _ in range(nb_trainers):
@@ -108,6 +130,9 @@ def generate_fake_trainer(nb_trainers):
         )
         list_result.append(trainer)
     return list_result
+
+
+#region user
 
 def generate_fake_user(nb_users):
     list_result = []
