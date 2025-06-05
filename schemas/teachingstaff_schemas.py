@@ -6,6 +6,7 @@ from pydantic import BaseModel, EmailStr, StringConstraints, Field
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.teachingstaff import TeachingStaffRole
+from models.user import UserRole
 
 
 class TeachingStaffCreate(BaseModel):
@@ -14,6 +15,7 @@ class TeachingStaffCreate(BaseModel):
     email: EmailStr  # `unique=True` supprimé (non supporté ici)
     age: Annotated[int, Field(gt=16)]
     date_create: date.date
+    role: UserRole = UserRole.user_techingstaff
     work: TeachingStaffRole
     date_appointement: date.date  # Correction : instancier `date.date`, pas le module
     responsabilities: Dict[str, Any]

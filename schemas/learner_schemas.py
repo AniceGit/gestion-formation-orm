@@ -16,7 +16,7 @@ class LearnerCreate(BaseModel):
     email: EmailStr = Field(unique=True)
     age: Annotated[int, Field(gt=16)]
     date_create: date.date
-    role: UserRole
+    role: UserRole = UserRole.user_learner
     birth_date: date.date = Field(None, ge=date.date.today() - relativedelta(years=16))
     study_level: Optional[str] = None  # unrequired field
     phone: Optional[PhoneNumber] = None  # unrequired field
@@ -36,7 +36,6 @@ def main():
             "email": "john.doe@generator.com",
             "age": 42,
             "date_create": date.datetime.now().date(),
-            "role": UserRole("Learner"),
             "birth_date": date.datetime(2009, 6, 5),
             "platform_registration_date": date.datetime.now().date(),
             "phone": "+213676424242",
@@ -47,7 +46,6 @@ def main():
             "email": "jane.doe@generator.com",
             "age": 40,
             "date_create": date.datetime.now().date(),
-            "role": UserRole("Learner"),
             "birth_date": date.datetime.now().date(),
             "platform_registration_date": date.datetime.now().date(),
         },
