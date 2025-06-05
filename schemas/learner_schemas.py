@@ -13,8 +13,8 @@ from dateutil.relativedelta import relativedelta
 class LearnerCreate(BaseModel):
     name: Annotated[str, StringConstraints(max_length=50)]
     firstname: Annotated[str, StringConstraints(max_length=50)]
-    email: EmailStr
-    age: int = Field(None, gt=16)
+    email: EmailStr = Field(unique=True)
+    age: Annotated[int, Field(gt=16)]
     date_create: date.date
     role: UserRole
     birth_date: date.date = Field(None, ge=date.date.today() - relativedelta(years=16))
