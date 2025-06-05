@@ -20,5 +20,5 @@ class Session(SQLModel, table=True):
     max_capacity: int
     status: StatusEnum = Field(default=StatusEnum.OPEN)
     requirements: str
-    id_trainer: int = Field(foreign_key="trainer.id")
-    id_room: int = Field(foreign_key="room.id")
+    id_trainer: int = Field(foreign_key="trainer.id_trainer")
+    id_room: int = Field(foreign_key="room.id_room")
