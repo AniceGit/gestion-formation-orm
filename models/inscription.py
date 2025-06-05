@@ -12,9 +12,9 @@ class InscriptionStatusEnum(str, Enum):
 
 
 class Inscription(SQLModel, table=True):
-    id_inscription: int | None = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     inscription_date: date = Field(default=datetime.now())
     inscription_status: InscriptionStatusEnum
     presence: Optional[bool]
-    id_session: int = Field(foreign_key="session.id_session")
-    id_learner: int = Field(foreign_key="learner.id_learner")
+    id_session: int = Field(foreign_key="session.id")
+    id_learner: int = Field(foreign_key="learner.id")
