@@ -13,7 +13,7 @@ class StatusEnum(str, Enum):
 
 class Session(SQLModel, table=True):
     __tablename__ = "session"
-    id_session: int = Field(default=None, primary_key=True)
+    id: int = Field(default=None, primary_key=True)
     title: str = Field(max_length=100)
     description: Optional[str] = None
     start_date: date
@@ -21,5 +21,5 @@ class Session(SQLModel, table=True):
     max_capacity: int
     status: StatusEnum = Field(default=StatusEnum.OPEN)
     requirements: str
-    id_trainer: int = Field(foreign_key="trainer.id_trainer")
-    id_room: int = Field(foreign_key="room.id_room")
+    id_trainer: int = Field(foreign_key="trainer.id")
+    id_room: int = Field(foreign_key="room.id")

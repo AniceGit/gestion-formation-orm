@@ -12,6 +12,7 @@ from models.trainer import Trainer
 from models.admin import Admin, AdminAdminRoleLink, AdminRole
 from models.room import Room
 from models.session import Session
+from models.inscription import Inscription
 
 
 def create_db_and_tables():
