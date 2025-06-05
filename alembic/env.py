@@ -1,5 +1,13 @@
 from logging.config import fileConfig
-from models import SQLModel
+from sqlmodel import SQLModel
+from models.user import User
+from models.learner import Learner
+from models.teachingstaff import TeachingStaff
+from models.trainer import Trainer
+from models.admin import Admin, AdminAdminRoleLink, AdminRole
+from models.room import Room
+from models.session import Session
+from models.inscription import Inscription
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
