@@ -1,4 +1,6 @@
 from sqlmodel import Field, Session, SQLModel, create_engine
+from typing import Dict, Any
+from sqlalchemy import Column, JSON
 
 
 class Room(SQLModel, table=True):
@@ -7,5 +9,5 @@ class Room(SQLModel, table=True):
     name: str
     capacity: int
     localization: str
-    stuff: str
+    stuff: Dict[str, Any] = Field(default=None, sa_column=Column(JSON))
     is_active: bool = True
