@@ -16,7 +16,7 @@ class TrainerCreate(BaseModel):
     email: EmailStr = Field(unique=True)
     birth_date: date.date = Field(None, ge=date.date.today() - relativedelta(years=16))
     date_create: date.date
-    role: UserRole = UserRole.user_trainer
+    role: UserRole = UserRole.trainer
     speciality: str
     date_hire: date.date = Field(None, lt=date.date.today())
     hourly_rate: Annotated[float, Field(ge=0.0)]
@@ -26,36 +26,3 @@ class TrainerCreate(BaseModel):
         str_strip_whitespace = True
         str_to_lower = True
         frozen = True
-
-
-def main():
-    info_user_dict = [
-        {
-            "name": "John",
-            "firstname": "Doe",
-            "email": "john.doe@generator.com",
-            "age": 42,
-            "date_create": date.datetime.now().date(),
-            "speciality": "Data Science",
-            "date_hire": date.datetime(2009, 6, 5),
-            "hourly_rate": 37.5,
-        },
-        {
-            "name": "Jane",
-            "firstname": "Doe",
-            "email": "jane.doe@generator.com",
-            "age": 40,
-            "date_create": date.datetime.now().date(),
-            "speciality": "DevOps",
-            "date_hire": date.datetime(2014, 6, 5),
-            "hourly_rate": 35,
-        },
-    ]
-
-    new_users = [TrainerCreate(**item) for item in info_user_dict]
-    print(new_users[0].name)
-    print(new_users[0].email)
-
-
-if __name__ == "__main__":
-    main()

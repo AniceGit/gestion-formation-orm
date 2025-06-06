@@ -1,0 +1,1 @@
+rm ./bdd/database.db

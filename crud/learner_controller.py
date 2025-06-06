@@ -17,7 +17,7 @@ def add_learner(learner_obj: LearnerCreate, session_add_learner) -> None:
             email=learner_obj.email,
             birth_date=learner_obj.birth_date,
             date_create=learner_obj.date_create,
-            role=UserRole.user_learner,
+            role=learner_obj.role,
             phone=learner_obj.phone,
             platform_registration_date=learner_obj.platform_registration_date,
         )
@@ -25,9 +25,12 @@ def add_learner(learner_obj: LearnerCreate, session_add_learner) -> None:
         session_add_learner.add(new_user)
         session_add_learner.commit()
 
-        print(f"User: {new_user}")
-
+        print(f"User: {new_user.id}")
+        print(f"User statut: {UserRole.learner}")
         session_add_learner.close()
 
-    except:
+    except Exception as exc:
+        print("-" * 25)
         print("L'utilisateur n'a pas été ajouté")
+        print(f"Exception: {exc}")
+        print("-" * 25)

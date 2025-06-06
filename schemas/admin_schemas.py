@@ -35,7 +35,7 @@ class AdminCreate(BaseModel):
     email: EmailStr = Field(unique=True)
     birth_date: date.date = Field(None, ge=date.date.today() - relativedelta(years=16))
     date_create: date.date
-    role: UserRole = UserRole.user_admin
+    role: UserRole = UserRole.admin
     access_level: List[int]
     promotion_date: date.date
 
@@ -43,69 +43,3 @@ class AdminCreate(BaseModel):
         str_strip_whitespace = True
         str_to_lower = True
         frozen = True
-
-
-def main():
-    info_user_dict = [
-        {
-            "name": "John",
-            "firstname": "Doe",
-            "email": "john.doe@generator.com",
-            "age": 42,
-            "date_create": date.datetime.now().date(),
-            "access_level": [
-                1,
-                2,
-            ],
-            "promotion_date": date.datetime(2009, 6, 5),
-        },
-        {
-            "name": "Jane",
-            "firstname": "Doe",
-            "email": "jane.doe@generator.com",
-            "age": 40,
-            "date_create": date.datetime.now().date(),
-            "access_level": [
-                1,
-            ],
-            "promotion_date": date.datetime(2009, 6, 5),
-        },
-    ]
-
-    info_admin_role_dict = [
-        {"name": "SUPERADMIN"},
-        {"name": "ADMIN_STANDARD"},
-    ]
-
-    info_admin_adminrole_link_dict = [
-        {
-            "admin_id": 1,
-            "role_id": 1,
-        },
-        {
-            "admin_id": 1,
-            "role_id": 2,
-        },
-        {
-            "admin_id": 2,
-            "role_id": 1,
-        },
-    ]
-
-    new_users = [AdminCreate(**item) for item in info_user_dict]
-    print(new_users[0].name)
-    print(new_users[0].promotion_date)
-    print(new_users[0].access_level)
-
-    new_admin_role = [AdminRoleCreate(**item) for item in info_admin_role_dict]
-    print(new_admin_role[0].name)
-
-    new_admin_adminrole_link = [
-        AdminAdminRoleLinkCreate(**item) for item in info_admin_adminrole_link_dict
-    ]
-    print(new_admin_adminrole_link[0].admin_id)
-    print(new_admin_adminrole_link[1].admin_id)
-
-
-if __name__ == "__main__":
-    main()

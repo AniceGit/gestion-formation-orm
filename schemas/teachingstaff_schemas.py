@@ -16,7 +16,7 @@ class TeachingStaffCreate(BaseModel):
     email: EmailStr  # `unique=True` supprimé (non supporté ici)
     birth_date: date.date = Field(None, ge=date.date.today() - relativedelta(years=16))
     date_create: date.date
-    role: UserRole = UserRole.user_techingstaff
+    role: UserRole = UserRole.techingstaff
     work: TeachingStaffRole
     date_appointement: date.date  # Correction : instancier `date.date`, pas le module
     responsabilities: Dict[str, Any]
@@ -26,36 +26,3 @@ class TeachingStaffCreate(BaseModel):
         str_strip_whitespace = True
         str_to_lower = True
         frozen = True
-
-
-def main():
-    info_user_dict = [
-        {
-            "name": "John",
-            "firstname": "Doe",
-            "email": "john.doe@generator.com",
-            "age": 42,
-            "date_create": date.datetime.now().date(),
-            "work": "RESPONSABLE PEDAGOGIQUE",
-            "date_appointement": date.datetime.now().date(),  # Correction ici
-            "responsabilities": {"cours": "Python", "level": "advanced"},
-        },
-        {
-            "name": "Jane",
-            "firstname": "Doe",
-            "email": "jane.doe@generator.com",
-            "age": 40,
-            "date_create": date.datetime.now().date(),
-            "work": "CHARGEE DE PROJET",
-            "date_appointement": date.datetime.now().date(),  # Correction ici
-            "responsabilities": {"cours": "Java", "level": "advanced"},
-        },
-    ]
-
-    new_users = [TeachingStaffCreate(**item) for item in info_user_dict]
-    print(new_users[0].name)
-    print(new_users[0].responsabilities)
-
-
-if __name__ == "__main__":
-    main()
