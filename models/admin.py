@@ -2,6 +2,7 @@ from sqlmodel import Field, SQLModel, Relationship, create_engine
 from typing import List, Optional
 from enum import Enum
 from datetime import date
+import models.user as u
 
 
 class AdminAdminRoleLink(SQLModel, table=True):
@@ -19,10 +20,8 @@ class AdminRole(SQLModel, table=True):
     )
 
 
-class Admin(SQLModel, table=True):
+class Admin(u.User, table=True):
     __tablename__ = "admin"
-    id: int = Field(default=None, primary_key=True)
-    id_user: int = Field(foreign_key="user.id")
     access_level: List[AdminRole] = Relationship(
         back_populates="admins", link_model=AdminAdminRoleLink
     )  # required field

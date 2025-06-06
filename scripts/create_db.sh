@@ -1,0 +1,1 @@
+python3 ./bdd/create_db.py
