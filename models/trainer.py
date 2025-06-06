@@ -9,4 +9,4 @@ class Trainer(u.User, table=True):
     speciality: str  # required field
     date_hire: date  # required field
     hourly_rate: float  # required field
-    bio: Optional[str]  # required field
+    bio: Optional[str]
