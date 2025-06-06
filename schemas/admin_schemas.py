@@ -33,7 +33,7 @@ class AdminCreate(BaseModel):
     name: Annotated[str, StringConstraints(max_length=50)]
     firstname: Annotated[str, StringConstraints(max_length=50)]
     email: EmailStr = Field(unique=True)
-    age: Annotated[int, Field(gt=16)]
+    birth_date: date.date = Field(None, ge=date.date.today() - relativedelta(years=16))
     date_create: date.date
     role: UserRole = UserRole.user_admin
     access_level: List[int]

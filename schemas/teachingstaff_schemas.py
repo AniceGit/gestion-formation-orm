@@ -7,13 +7,14 @@ from pydantic import BaseModel, EmailStr, StringConstraints, Field
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.teachingstaff import TeachingStaffRole
 from models.user import UserRole
+from dateutil.relativedelta import relativedelta
 
 
 class TeachingStaffCreate(BaseModel):
     name: Annotated[str, StringConstraints(max_length=50)]
     firstname: Annotated[str, StringConstraints(max_length=50)]
     email: EmailStr  # `unique=True` supprimé (non supporté ici)
-    age: Annotated[int, Field(gt=16)]
+    birth_date: date.date = Field(None, ge=date.date.today() - relativedelta(years=16))
     date_create: date.date
     role: UserRole = UserRole.user_techingstaff
     work: TeachingStaffRole
