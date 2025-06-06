@@ -1,12 +1,9 @@
-from sqlalchemy.orm import sessionmaker
 import os, sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from models.user import User, UserRole
 from models.learner import Learner
 from db.database import engine
 from schemas.learner_schemas import LearnerCreate
-import datetime as date
 
 
 def add_learner(learner_obj: LearnerCreate, session_add_learner) -> None:
@@ -26,7 +23,7 @@ def add_learner(learner_obj: LearnerCreate, session_add_learner) -> None:
         session_add_learner.commit()
 
         print(f"User: {new_user.id}")
-        print(f"User statut: {UserRole.learner}")
+        print(f"User statut: {new_user.role}")
         session_add_learner.close()
 
     except Exception as exc:
