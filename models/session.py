@@ -1,7 +1,8 @@
-from sqlmodel import Field, SQLModel, create_engine
+from sqlmodel import Field, SQLModel
 from datetime import date
 from enum import Enum
-from typing import Optional
+from typing import Optional, Dict
+from sqlalchemy import Column, JSON
 
 
 # enum for status in session
@@ -20,6 +21,6 @@ class Session(SQLModel, table=True):
     end_date: date
     max_capacity: int
     status: StatusEnum = Field(default=StatusEnum.OPEN)
-    requirements: str
+    requirements: Dict[str, str] = Field(default=None, sa_column=Column(JSON))
     id_trainer: int = Field(foreign_key="trainer.id")
     id_room: int = Field(foreign_key="room.id")
