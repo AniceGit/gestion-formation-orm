@@ -194,4 +194,4 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
-./db/*.db
+.db
