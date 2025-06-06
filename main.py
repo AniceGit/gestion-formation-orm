@@ -31,26 +31,26 @@ def connect_to_session():
 
 def main():
     # Users creation
-    # new_learner = learn_sch.LearnerCreate(
-    #     name="John",
-    #     firstname="Doe",
-    #     email="john.doe@generator.com",
-    #     birth_date=date.datetime(2009, 6, 6),
-    #     date_create=date.datetime.now().date(),
-    #     phone="+213676424242",
-    #     platform_registration_date=date.datetime.now().date(),
-    # )
+    new_learner = learn_sch.LearnerCreate(
+        name="John",
+        firstname="Doe",
+        email="john.doe@generator.com",
+        birth_date=date.datetime(2009, 6, 6),
+        date_create=date.datetime.now().date(),
+        phone="+213676424242",
+        platform_registration_date=date.datetime.now().date(),
+    )
 
-    # new_trainer = train_sch.TrainerCreate(
-    #     name="John",
-    #     firstname="Doe",
-    #     email="john.doe@generator.com",
-    #     birth_date=date.datetime(2009, 6, 6),
-    #     date_create=date.datetime.now().date(),
-    #     speciality="DevOps",
-    #     date_hire=date.datetime(2003, 4, 13),
-    #     hourly_rate=14.67,
-    # )
+    new_trainer = train_sch.TrainerCreate(
+        name="John",
+        firstname="Doe",
+        email="john.doe@generator.com",
+        birth_date=date.datetime(2009, 6, 6),
+        date_create=date.datetime.now().date(),
+        speciality="DevOps",
+        date_hire=date.datetime(2003, 4, 13),
+        hourly_rate=14.67,
+    )
 
     new_teachingstaff = teachstaff_contr.TeachingStaffCreate(
         name="John",
@@ -67,8 +67,8 @@ def main():
     )
 
     # Users insert
-    # learn_contr.add_learner(new_learner, connect_to_session())
-    # train_contr.add_trainer(new_trainer, connect_to_session())
+    learn_contr.add_learner(new_learner, connect_to_session())
+    train_contr.add_trainer(new_trainer, connect_to_session())
     teachstaff_contr.add_teachingstaff(new_teachingstaff, connect_to_session())
 
 
