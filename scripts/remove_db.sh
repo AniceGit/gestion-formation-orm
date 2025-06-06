@@ -1,1 +1,1 @@
-rm ./db/database.db
+rm ./db/gestion-formation.db
