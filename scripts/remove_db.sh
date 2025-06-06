@@ -1,1 +1,1 @@
-rm ./bdd/database.db
+rm ./db/database.db
