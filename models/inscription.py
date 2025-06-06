@@ -1,5 +1,5 @@
 from sqlmodel import Field, SQLModel
-from datetime import date, datetime
+from datetime import datetime
 from enum import Enum
 from typing import Optional
 
@@ -13,7 +13,7 @@ class InscriptionStatusEnum(str, Enum):
 
 class Inscription(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    inscription_date: date = Field(default=datetime.now())
+    inscription_date: datetime = Field(default=datetime.now())
     inscription_status: InscriptionStatusEnum
     presence: Optional[bool]
     id_session: int = Field(foreign_key="session.id")
