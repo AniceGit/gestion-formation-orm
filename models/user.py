@@ -1,22 +1,24 @@
 from sqlmodel import Field, SQLModel, create_engine
+from sqlalchemy import UniqueConstraint
 from enum import Enum
 from datetime import date
 
 
 class UserRole(str, Enum):
-    user_learner = "Learner"
-    user_trainer = "Trainer"
-    user_techingstaff = "TeachingStaff"
-    user_admin = "Admin"
+    learner = "Learner"
+    trainer = "Trainer"
+    techingstaff = "TeachingStaff"
+    admin = "Admin"
 
 
-class User(SQLModel, table=True):
+class User(SQLModel, table=False):
     __tablename__ = "user"
+    __table_args__ = (UniqueConstraint("email"),)
     id: int | None = Field(default=None, primary_key=True)
-    name: str  # required field
-    firstname: str  # required field
+    name: str = Field(max_length=50)  # required field
+    firstname: str = Field(max_length=50)  # required field
     email: str  # required field
-    age: int  # required field
+    birth_date: date  # required field
     date_create: date  # required field
     is_active: bool = Field(default=True)  # required field
     role: UserRole  # required field
