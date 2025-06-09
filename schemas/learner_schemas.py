@@ -2,21 +2,14 @@ import sys
 import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from models.user import UserRole
-from typing import Optional, Annotated
-from pydantic import BaseModel, EmailStr, constr, StringConstraints, Field
+from schemas import user_schemas as us_sche
+from typing import Optional
+from pydantic import Field
 from pydantic_extra_types.phone_numbers import PhoneNumber
 import datetime as date
-from dateutil.relativedelta import relativedelta
 
 
-class LearnerCreate(BaseModel):
-    name: Annotated[str, StringConstraints(max_length=50)]
-    firstname: Annotated[str, StringConstraints(max_length=50)]
-    email: EmailStr = Field(unique=True)
-    birth_date: date.date = Field(None, ge=date.date.today() - relativedelta(years=16))
-    date_create: date.date
-    role: UserRole = UserRole.learner
+class LearnerCreate(us_sche.UserCreate):
     study_level: Optional[str] = None  # unrequired field
     phone: Optional[PhoneNumber] = None  # unrequired field
     platform_registration_date: date.date = Field(default=date.datetime.now())

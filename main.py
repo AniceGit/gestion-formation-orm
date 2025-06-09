@@ -16,6 +16,7 @@ from schemas import inscription_schemas as insc_sch
 from crud import learner_controller as learn_contr
 from crud import trainer_controller as train_contr
 from crud import teachingstaff_controller as teachstaff_contr
+from crud import admin_controller as admin_contr
 
 # enum
 from models.teachingstaff import TeachingStaffRole as teachstaff_role
@@ -52,7 +53,7 @@ def main():
         hourly_rate=14.67,
     )
 
-    new_teachingstaff = teachstaff_contr.TeachingStaffCreate(
+    new_teachingstaff = tstaff_sch.TeachingStaffCreate(
         name="John",
         firstname="Doe",
         email="john.doe@generator.com",
@@ -66,10 +67,29 @@ def main():
         },
     )
 
+    # new_admin_role1 = adm_sch.AdminRoleCreate(name="SUPERADMIN")
+    # new_admin_role2 = adm_sch.AdminRoleCreate(name="ADMIN_STANDARD")
+
+    # admin_contr.add_admin_role(new_admin_role1, connect_to_session())
+    # admin_contr.add_admin_role(new_admin_role2, connect_to_session())
+
+    # new_admin = adm_sch.AdminCreate(
+    #     name="John",
+    #     firstname="Doe",
+    #     email="john.doe@generator.com",
+    #     birth_date=date.datetime(1994, 6, 6),
+    #     date_create=date.datetime.now().date(),
+    #     work=teachstaff_role.EDUCATIONAL_MANAGER,
+    #     access_level=[1, 2],
+    #     promotion_date=date.datetime(2013, 6, 6),
+    # )
+    session = connect_to_session()
+
     # Users insert
     learn_contr.add_learner(new_learner, connect_to_session())
     train_contr.add_trainer(new_trainer, connect_to_session())
     teachstaff_contr.add_teachingstaff(new_teachingstaff, connect_to_session())
+    # admin_contr.add_admin(new_admin, connect_to_session())
 
 
 if __name__ == "__main__":
