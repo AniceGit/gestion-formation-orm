@@ -20,7 +20,13 @@ def add_admin(admin_obj: AdminCreate, session_add_admin) -> None:
 
         session_add_admin.add(new_user)
         session_add_admin.commit()
+        session_add_admin.refresh(new_user)
 
+        for access_id in admin_obj.access_level:
+            link = AdminAdminRoleLink(admin_id=new_user.id, role_id=access_id)
+            session_add_admin.add(link)
+
+        session_add_admin.commit()
         print(f"User: {new_user.id}")
         print(f"User statut: {new_user.role}")
         session_add_admin.close()
@@ -51,8 +57,7 @@ def add_admin_role(admin_obj: AdminRoleCreate, session_add_admin_role) -> None:
         session_add_admin_role.add(new_admin_role)
         session_add_admin_role.commit()
 
-        print(f"User: {new_admin_role.id}")
-        print(f"User statut: {new_admin_role.role}")
+        print(f"Role: {new_admin_role.id}")
         session_add_admin_role.close()
 
     except Exception as exc:

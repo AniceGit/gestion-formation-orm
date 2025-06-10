@@ -28,7 +28,7 @@ class AdminRoleCreate(BaseModel):
 
 
 class AdminCreate(us_sche.UserCreate):
-    access_level: List[AdminRoleCreate]
+    access_level: List[int]  # list of AdminRole:id
     promotion_date: date.date
 
     class Config:
