@@ -31,6 +31,8 @@ def connect_to_session():
 
 
 def main():
+    session = connect_to_session()
+
     # Users creation
     new_learner = learn_sch.LearnerCreate(
         name="John",
@@ -67,29 +69,30 @@ def main():
         },
     )
 
-    # new_admin_role1 = adm_sch.AdminRoleCreate(name="SUPERADMIN")
-    # new_admin_role2 = adm_sch.AdminRoleCreate(name="ADMIN_STANDARD")
+    new_admin = adm_sch.AdminCreate(
+        name="John",
+        firstname="Doe",
+        email="john.doe@generator.com",
+        birth_date=date.datetime(1994, 6, 6),
+        date_create=date.datetime.now().date(),
+        work=teachstaff_role.EDUCATIONAL_MANAGER,
+        access_level=[1, 2],
+        promotion_date=date.datetime(2013, 6, 6),
+    )
 
-    # admin_contr.add_admin_role(new_admin_role1, connect_to_session())
-    # admin_contr.add_admin_role(new_admin_role2, connect_to_session())
+    # Admin role creation
+    new_admin_role1 = adm_sch.AdminRoleCreate(name="SUPERADMIN")
+    new_admin_role2 = adm_sch.AdminRoleCreate(name="ADMIN_STANDARD")
 
-    # new_admin = adm_sch.AdminCreate(
-    #     name="John",
-    #     firstname="Doe",
-    #     email="john.doe@generator.com",
-    #     birth_date=date.datetime(1994, 6, 6),
-    #     date_create=date.datetime.now().date(),
-    #     work=teachstaff_role.EDUCATIONAL_MANAGER,
-    #     access_level=[1, 2],
-    #     promotion_date=date.datetime(2013, 6, 6),
-    # )
-    session = connect_to_session()
+    # Admin role insert
+    admin_contr.add_admin_role(new_admin_role1, session)
+    admin_contr.add_admin_role(new_admin_role2, session)
 
     # Users insert
-    learn_contr.add_learner(new_learner, connect_to_session())
-    train_contr.add_trainer(new_trainer, connect_to_session())
-    teachstaff_contr.add_teachingstaff(new_teachingstaff, connect_to_session())
-    # admin_contr.add_admin(new_admin, connect_to_session())
+    learn_contr.add_learner(new_learner, session)
+    train_contr.add_trainer(new_trainer, session)
+    teachstaff_contr.add_teachingstaff(new_teachingstaff, session)
+    admin_contr.add_admin(new_admin, session)
 
 
 if __name__ == "__main__":
