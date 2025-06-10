@@ -4,8 +4,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.user import UserRole
 from typing import Optional, Annotated
-from pydantic import BaseModel, EmailStr, constr, StringConstraints, Field
-from pydantic_extra_types.phone_numbers import PhoneNumber
+from pydantic import BaseModel, EmailStr, StringConstraints, Field
 import datetime as date
 from dateutil.relativedelta import relativedelta
 

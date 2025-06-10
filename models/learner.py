@@ -1,4 +1,3 @@
-from sqlmodel import Field, SQLModel, create_engine
 from typing import Optional
 from datetime import date
 import models.user as u

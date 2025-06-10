@@ -9,14 +9,13 @@ from config import (
     NBR_TRAINER,
     NBR_USER,
 )
-from models.admin import Admin
-from models.inscription import Inscription
-from models.learner import Learner
-from models.room import Room
-from models.session import Session
-from models.teachingstaff import TeachingStaff
-from models.trainer import Trainer
-from models.user import User
+from schemas.admin_schemas import AdminCreate
+from schemas.inscription_schemas import InscriptionCreate
+from schemas.learner_schemas import LearnerCreate
+from schemas.room_schemas import RoomCreate
+from schemas.session_schemas import SessionCreate
+from schemas.teachingstaff_schemas import TeachingStaffCreate
+from schemas.trainer_schemas import TrainerCreate
 
 faker = fk.Faker()
 
@@ -26,13 +25,32 @@ def random_element_list(liste):
     return liste[faker.pyint(0, len(liste) - 1)]
 
 
+# region user
+
+
+# create a dict to be injected in child class
+def generate_fake_user() -> dict[str, any]:
+    user_data = {
+        "name": faker.name(),
+        "firstname": faker.first_name(),
+        "email": faker.email(),
+        "birth_date": faker.date_of_birth(minimum_age=16),
+        "date_create": faker.date(),
+        "is_active": faker.pyint(0, 1),
+    }
+    return user_data
+
+
 # region admin
 
 
-def generate_fake_admin(nb_admins: int = NBR_ADMIN) -> list[Admin]:
+def generate_fake_admin(nb_admins: int = NBR_ADMIN) -> list[AdminCreate]:
     list_result = []
     for _ in range(nb_admins):
-        admin = Admin(
+        user_attributes = generate_fake_user()
+        admin = AdminCreate(
+            **user_attributes,
+            role="Admin",
             id_user=faker.pyint(1, NBR_USER),
             # access_level = ,
             promotion_date=faker.date(),
@@ -40,17 +58,23 @@ def generate_fake_admin(nb_admins: int = NBR_ADMIN) -> list[Admin]:
         list_result.append(admin)
     return list_result
 
+def generate_fake_adminadmin():
+    """
+    tous les admins doivent être dedans
+    certains ont plusieurs roles
+    """
+
 
 # region inscription
 
 
 def generate_fake_inscription(
     nb_inscriptions: int = NBR_INSCRIPTION,
-) -> list[Inscription]:
+) -> list[InscriptionCreate]:
     list_result = []
     list_status = ["ENREGISTRE", "DESINSCRIT", "EN_ATTENTE"]
     for _ in range(nb_inscriptions):
-        inscription = Inscription(
+        inscription = InscriptionCreate(
             inscription_date=faker.date(),
             inscription_status=random_element_list(list_status),
             presence=faker.pyint(0, 1),
@@ -67,9 +91,11 @@ def generate_fake_inscription(
 def generate_fake_learner(nb_learners=NBR_LEARNER):
     list_result = []
     for _ in range(nb_learners):
-        learner = Learner(
+        user_attributes = generate_fake_user()
+        learner = LearnerCreate(
+            **user_attributes,
+            role="Learner",
             id_user=faker.pyint(1, NBR_USER),
-            birth_date=faker.date(),
             study_level=faker.pyint(0, 1),
             phone=faker.phone_number(),
             platform_registration_date=faker.date(),
@@ -84,7 +110,7 @@ def generate_fake_learner(nb_learners=NBR_LEARNER):
 def generate_fake_room(nb_rooms=NBR_ROOM):
     list_result = []
     for _ in range(nb_rooms):
-        room = Room(
+        room = RoomCreate(
             name=faker.name(),
             capacity=faker.pyint(),
             localization=faker.building_name(),
@@ -102,7 +128,7 @@ def generate_fake_session(nb_sessions=NBR_SESSION):
     list_result = []
     list_status = ["OPEN", "CLOSED", "ARCHIVED"]
     for _ in range(nb_sessions):
-        session = Session(
+        session = SessionCreate(
             title=faker.sentence(5, True),
             description=faker.sentence(14, True),
             start_date=faker.date(),
@@ -124,7 +150,10 @@ def generate_fake_teachingstaff(nb_teachingstaff=NBR_TEACHINGSTAFF):
     list_result = []
     list_role = ["RESPONSABLE PEDAGOGIQUE", "RESPONSABLE PEDAGOGIQUE"]
     for _ in range(nb_teachingstaff):
-        teachingStaff = TeachingStaff(
+        user_attributes = generate_fake_user()
+        teachingStaff = TeachingStaffCreate(
+            **user_attributes,
+            role="TeachingStaff",
             id_user=faker.pyint(1, NBR_USER),
             work=random_element_list(list_role),
             date_appointement=faker.date(),
@@ -140,7 +169,10 @@ def generate_fake_teachingstaff(nb_teachingstaff=NBR_TEACHINGSTAFF):
 def generate_fake_trainer(nb_trainers=NBR_TRAINER):
     list_result = []
     for _ in range(nb_trainers):
-        trainer = Trainer(
+        user_attributes = generate_fake_user()
+        trainer = TrainerCreate(
+            **user_attributes,
+            role="Trainer",
             id_user=faker.pyint(1, NBR_USER),
             speciality=faker.word(),
             date_hire=faker.date(),
@@ -148,24 +180,4 @@ def generate_fake_trainer(nb_trainers=NBR_TRAINER):
             bio=faker.sentence(10, True),
         )
         list_result.append(trainer)
-    return list_result
-
-
-# region user
-
-
-def generate_fake_user(nb_users=(NBR_USER)):
-    list_result = []
-    list_user_role = ["Learner", "Trainer", "TeachingStaff", "Admin"]
-    for _ in range(nb_users):
-        user = User(
-            name=faker.name(),
-            firstname=faker.first_name(),
-            email=faker.email(),
-            age=faker.pyint(18, 79),
-            date_create=faker.date(),
-            is_active=faker.pyint(0, 1),
-            role=random_element_list(list_user_role),
-        )
-        list_result.append(user)
     return list_result
