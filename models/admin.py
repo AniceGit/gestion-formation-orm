@@ -1,6 +1,5 @@
-from sqlmodel import Field, SQLModel, Relationship, create_engine
+from sqlmodel import Field, SQLModel, Relationship
 from typing import List, Optional
-from enum import Enum
 from datetime import date
 import models.user as u
 

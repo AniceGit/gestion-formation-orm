@@ -8,8 +8,9 @@ from config import (
     NBR_TEACHINGSTAFF,
     NBR_TRAINER,
     NBR_USER,
+    NBR_ROLE,
 )
-from schemas.admin_schemas import AdminCreate
+from schemas.admin_schemas import AdminCreate, AdminAdminRoleLinkCreate
 from schemas.inscription_schemas import InscriptionCreate
 from schemas.learner_schemas import LearnerCreate
 from schemas.room_schemas import RoomCreate
@@ -58,11 +59,14 @@ def generate_fake_admin(nb_admins: int = NBR_ADMIN) -> list[AdminCreate]:
         list_result.append(admin)
     return list_result
 
-def generate_fake_adminadmin():
+def generate_fake_adminadmin(nb_admins: int = NBR_ADMIN, nb_roles: int = NBR_ROLE) -> list[AdminAdminRoleLinkCreate]:
     """
     tous les admins doivent être dedans
     certains ont plusieurs roles
     """
+    list_result = []
+    for _ in range(nb_admins):
+        for _ in range(faker.pyint(1,nb_roles)):
 
 
 # region inscription
