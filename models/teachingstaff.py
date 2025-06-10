@@ -1,4 +1,4 @@
-from sqlmodel import Field, SQLModel, create_engine
+from sqlmodel import Field
 from sqlalchemy import Column, JSON
 from typing import Optional, Any, Dict
 from enum import Enum

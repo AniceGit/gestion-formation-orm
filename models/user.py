@@ -1,4 +1,4 @@
-from sqlmodel import Field, SQLModel, create_engine
+from sqlmodel import Field, SQLModel
 from sqlalchemy import UniqueConstraint
 from enum import Enum
 from datetime import date
