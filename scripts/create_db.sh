@@ -1,1 +1,1 @@
-python3 ./bdd/create_db.py
+python3 ./db/create_db.py

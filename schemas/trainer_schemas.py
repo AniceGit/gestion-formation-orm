@@ -2,20 +2,13 @@ import sys
 import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from models.user import UserRole
+from schemas import user_schemas as us_sche
 from typing import Optional, Annotated
-from pydantic import BaseModel, EmailStr, StringConstraints, Field
+from pydantic import StringConstraints, Field
 import datetime as date
-from dateutil.relativedelta import relativedelta
 
 
-class TrainerCreate(BaseModel):
-    name: Annotated[str, StringConstraints(max_length=50)]
-    firstname: Annotated[str, StringConstraints(max_length=50)]
-    email: EmailStr = Field(unique=True)
-    birth_date: date.date = Field(None, ge=date.date.today() - relativedelta(years=16))
-    date_create: date.date
-    role: UserRole = UserRole.trainer
+class TrainerCreate(us_sche.UserCreate):
     speciality: str
     date_hire: date.date = Field(None, lt=date.date.today())
     hourly_rate: Annotated[float, Field(ge=0.0)]

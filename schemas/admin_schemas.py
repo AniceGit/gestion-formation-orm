@@ -2,12 +2,10 @@ import sys
 import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from models.user import UserRole
-from typing import Optional, Annotated, List
-from pydantic import BaseModel, EmailStr, constr, StringConstraints, Field
-from pydantic_extra_types.phone_numbers import PhoneNumber
+from schemas import user_schemas as us_sche
+from typing import Annotated, List
+from pydantic import BaseModel, StringConstraints, Field
 import datetime as date
-from dateutil.relativedelta import relativedelta
 
 
 class AdminAdminRoleLinkCreate(BaseModel):
@@ -29,14 +27,8 @@ class AdminRoleCreate(BaseModel):
         frozen = True
 
 
-class AdminCreate(BaseModel):
-    name: Annotated[str, StringConstraints(max_length=50)]
-    firstname: Annotated[str, StringConstraints(max_length=50)]
-    email: EmailStr = Field(unique=True)
-    birth_date: date.date = Field(None, ge=date.date.today() - relativedelta(years=16))
-    date_create: date.date
-    role: UserRole = UserRole.admin
-    access_level: List[int]
+class AdminCreate(us_sche.UserCreate):
+    access_level: List[AdminRoleCreate]
     promotion_date: date.date
 
     class Config:
