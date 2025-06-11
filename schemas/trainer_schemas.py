@@ -12,7 +12,7 @@ class TrainerCreate(us_sche.UserCreate):
     speciality: str
     date_hire: date.date = Field(None, le=date.date.today())
     hourly_rate: Annotated[float, Field(ge=0.0)]
-    bio: Annotated[Optional[str], StringConstraints(max_length=50)] = None
+    bio: Annotated[Optional[str], StringConstraints(max_length=255)] = None
 
     class Config:
         str_strip_whitespace = True
