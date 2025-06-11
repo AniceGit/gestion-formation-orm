@@ -8,17 +8,7 @@ from schemas.trainer_schemas import TrainerCreate
 
 def add_trainer(trainer_obj: TrainerCreate, session_add_trainer) -> None:
     try:
-        new_user = Trainer(
-            name=trainer_obj.name,
-            firstname=trainer_obj.firstname,
-            email=trainer_obj.email,
-            birth_date=trainer_obj.birth_date,
-            date_create=trainer_obj.date_create,
-            role=trainer_obj.role,
-            speciality=trainer_obj.speciality,
-            date_hire=trainer_obj.date_hire,
-            hourly_rate=trainer_obj.hourly_rate,
-        )
+        new_user = Trainer(**trainer_obj.model_dump())
 
         session_add_trainer.add(new_user)
         session_add_trainer.commit()

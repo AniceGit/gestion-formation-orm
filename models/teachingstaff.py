@@ -13,6 +13,7 @@ class TeachingStaffRole(str, Enum):
 
 class TeachingStaff(u.User, table=True):
     __tablename__ = "teaching_staff"
+    __table_args__ = {"extend_existing": True}
     work: TeachingStaffRole  # required field
     date_appointement: date  # required field
     responsabilities: Optional[Dict[str, Any]] = Field(

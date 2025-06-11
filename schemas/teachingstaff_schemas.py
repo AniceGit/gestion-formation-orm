@@ -13,7 +13,7 @@ from schemas import user_schemas as us_sche
 
 class TeachingStaffCreate(us_sche.UserCreate):
     work: TeachingStaffRole
-    date_appointement: date.date = Field(None, lt=date.date.today())
+    date_appointement: date.date = Field(None, le=date.date.today())
     responsabilities: Optional[Dict[str, Any]]
 
     class Config:

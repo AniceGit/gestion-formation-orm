@@ -20,4 +20,5 @@ class AdminRole(SQLModel, table=True):
 
 class Admin(u.User, table=True):
     __tablename__ = "admin"
+    __table_args__ = {"extend_existing": True}
     promotion_date: date  # required field

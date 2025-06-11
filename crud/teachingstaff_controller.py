@@ -10,17 +10,7 @@ def add_teachingstaff(
     teachingstaff_obj: TeachingStaffCreate, session_add_teachingstaff
 ) -> None:
     try:
-        new_user = TeachingStaff(
-            name=teachingstaff_obj.name,
-            firstname=teachingstaff_obj.firstname,
-            email=teachingstaff_obj.email,
-            birth_date=teachingstaff_obj.birth_date,
-            date_create=teachingstaff_obj.date_create,
-            role=teachingstaff_obj.role,
-            work=teachingstaff_obj.work,
-            date_appointement=teachingstaff_obj.date_appointement,
-            responsabilities=teachingstaff_obj.responsabilities,
-        )
+        new_user = TeachingStaff(**teachingstaff_obj.model_dump())
 
         session_add_teachingstaff.add(new_user)
         session_add_teachingstaff.commit()
