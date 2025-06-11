@@ -53,14 +53,23 @@ def generate_fake_user() -> dict[str, any]:
 # region admin
 
 
-def generate_fake_admin(nb_admins: int = NBR_ADMIN) -> list[AdminCreate]:
+def generate_fake_admin(
+    nb_admins: int = NBR_ADMIN, liste_role_admin=LISTE_ROLES_ADMIN
+) -> list[AdminCreate]:
     list_result = []
+    list_id = list(range(1, len(liste_role_admin) + 1))
     for _ in range(nb_admins):
+        # creation list of a random number of different id available
+        list_access_level = []
+        shuffle(list_id)
+        for i in range(faker.pyint(0, len(liste_role_admin))):
+            list_access_level.append(list_id[i])
+
         user_attributes = generate_fake_user()
         admin = AdminCreate(
             **user_attributes,
             role="Admin",
-            access_level = ,
+            access_level=list_access_level,
             promotion_date=faker.date_object(),
         )
         list_result.append(admin)
@@ -90,7 +99,7 @@ def generate_fake_adminadmin(
     return list_result
 
 
-# liste_adminadmin = generate_fake_adminadmin()
+liste_adminadmin = generate_fake_adminadmin()
 
 # region inscription
 
@@ -112,7 +121,7 @@ def generate_fake_inscription(
     return list_result
 
 
-# liste_inscription = generate_fake_inscription()
+liste_inscription = generate_fake_inscription()
 
 
 # region learner
@@ -173,7 +182,7 @@ def generate_fake_room(nb_rooms=NBR_ROOM, stuff_dict=STUFF_DICT):
     return list_result
 
 
-# liste_room = generate_fake_room()
+liste_room = generate_fake_room()
 
 # region session
 
@@ -206,7 +215,7 @@ def generate_fake_session(nb_sessions=NBR_SESSION):
     return list_result
 
 
-# liste_session = generate_fake_session()
+liste_session = generate_fake_session()
 
 # region teachin
 
@@ -232,7 +241,7 @@ def generate_fake_teachingstaff(
     return list_result
 
 
-# list_teachingstaff = generate_fake_teachingstaff()
+list_teachingstaff = generate_fake_teachingstaff()
 
 # region trainer
 
@@ -254,4 +263,4 @@ def generate_fake_trainer(nb_trainers=NBR_TRAINER):
     return list_result
 
 
-# list_trainer = generate_fake_trainer()
+list_trainer = generate_fake_trainer()
