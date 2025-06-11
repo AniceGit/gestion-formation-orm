@@ -45,3 +45,32 @@ def get_all_inscriptions_as_create(session) -> list[InscriptionCreate]:
         print(f"Exception: {exc}")
         print("-" * 25)
         return []
+
+
+# region delete
+
+
+def delete_inscription_by_attr(attri: str, value: any, session) -> bool:
+    try:
+        inscription = (
+            session.query(Inscription)
+            .filter(getattr(Inscription, attri) == value)
+            .first()
+        )
+        if inscription:
+            inscription_name = inscription.name
+            session.delete(inscription)
+            session.commit()
+            print(f"Salle supprimée : {inscription_name}")
+            return True
+        else:
+            print(
+                f"Aucune salle trouvée avec l'attribut: {attri} et la valeur : {value}"
+            )
+            return False
+    except Exception as exc:
+        print("-" * 25)
+        print("Erreur lors de la suppression de la salle")
+        print(f"Exception: {exc}")
+        print("-" * 25)
+        return False

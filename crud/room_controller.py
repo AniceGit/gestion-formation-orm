@@ -4,6 +4,9 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.room import Room
 from schemas.room_schemas import RoomCreate
+from sqlmodel import select
+
+# region create
 
 
 def add_room(room_obj: RoomCreate, session_add_room) -> None:
@@ -23,6 +26,9 @@ def add_room(room_obj: RoomCreate, session_add_room) -> None:
         print("-" * 25)
 
 
+# region read
+
+
 def get_all_rooms_as_create(session) -> list[RoomCreate]:
     try:
         list_result = []
@@ -38,3 +44,28 @@ def get_all_rooms_as_create(session) -> list[RoomCreate]:
         print(f"Exception: {exc}")
         print("-" * 25)
         return []
+
+
+# region delete
+
+
+def delete_room_by_attr(attri: str, value: any, session) -> bool:
+    try:
+        room = session.exec(select(Room)).filter(getattr(Room, attri) == value).first()
+        if room:
+            room_name = room.name
+            session.delete(room)
+            session.commit()
+            print(f"Salle supprimée : {room_name}")
+            return True
+        else:
+            print(
+                f"Aucune salle trouvée avec l'attribut: {attri} et la valeur : {value}"
+            )
+            return False
+    except Exception as exc:
+        print("-" * 25)
+        print("Erreur lors de la suppression de la salle")
+        print(f"Exception: {exc}")
+        print("-" * 25)
+        return False
