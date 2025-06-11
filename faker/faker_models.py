@@ -1,4 +1,10 @@
+import sys
+import os
+import phonenumbers
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import faker as fk
+from random import shuffle, choice
 from config import (
     NBR_ADMIN,
     NBR_INSCRIPTION,
@@ -8,7 +14,9 @@ from config import (
     NBR_TEACHINGSTAFF,
     NBR_TRAINER,
     NBR_USER,
-    NBR_ROLE,
+    LISTE_ROLES_ADMIN,
+    STUFF_DICT,
+    STAFF_RESPONSIBILITIES,
 )
 from schemas.admin_schemas import AdminCreate, AdminAdminRoleLinkCreate
 from schemas.inscription_schemas import InscriptionCreate
@@ -52,22 +60,37 @@ def generate_fake_admin(nb_admins: int = NBR_ADMIN) -> list[AdminCreate]:
         admin = AdminCreate(
             **user_attributes,
             role="Admin",
-            id_user=faker.pyint(1, NBR_USER),
-            # access_level = ,
-            promotion_date=faker.date(),
+            access_level = ,
+            promotion_date=faker.date_object(),
         )
         list_result.append(admin)
     return list_result
 
-def generate_fake_adminadmin(nb_admins: int = NBR_ADMIN, nb_roles: int = NBR_ROLE) -> list[AdminAdminRoleLinkCreate]:
+
+list_admin = generate_fake_admin()
+
+
+def generate_fake_adminadmin(
+    liste_role_admin=LISTE_ROLES_ADMIN, nb_admins: int = NBR_ADMIN
+) -> list[AdminAdminRoleLinkCreate]:
     """
     tous les admins doivent être dedans
     certains ont plusieurs roles
     """
     list_result = []
-    for _ in range(nb_admins):
-        for _ in range(faker.pyint(1,nb_roles)):
+    list_id = list(range(1, len(liste_role_admin) + 1))
+    for i in range(1, nb_admins + 1):
+        user_attributes = generate_fake_user()
+        for j in range(faker.pyint(1, len(liste_role_admin))):
+            shuffle(list_id)
+            adminadmin = AdminAdminRoleLinkCreate(
+                **user_attributes, admin_id=i, role_id=list_id[j]
+            )
+            list_result.append(adminadmin)
+    return list_result
 
+
+# liste_adminadmin = generate_fake_adminadmin()
 
 # region inscription
 
@@ -89,41 +112,68 @@ def generate_fake_inscription(
     return list_result
 
 
+# liste_inscription = generate_fake_inscription()
+
+
 # region learner
+
+
+# create a valid phone number for pydantic
+def generate_valid_french_mobile():
+    # for french nuber, start by 6 or 7
+    first_digit = faker.random_element(elements=("6", "7"))
+    rest = faker.numerify("########")  # 8 numbers
+    national_number = f"{first_digit}{rest}"
+    phone_number = f"+33{national_number}"
+    # check phonenumbers
+    parsed = phonenumbers.parse(phone_number, None)  # return a PhoneNumber object
+    if phonenumbers.is_valid_number(parsed):
+        return phone_number
+    else:
+        # try until found a correct one
+        return generate_valid_french_mobile()
 
 
 def generate_fake_learner(nb_learners=NBR_LEARNER):
     list_result = []
     for _ in range(nb_learners):
+        phone = generate_valid_french_mobile()
         user_attributes = generate_fake_user()
         learner = LearnerCreate(
             **user_attributes,
             role="Learner",
             id_user=faker.pyint(1, NBR_USER),
-            study_level=faker.pyint(0, 1),
-            phone=faker.phone_number(),
+            study_level=faker.word(),
+            phone=phone,
             platform_registration_date=faker.date(),
         )
         list_result.append(learner)
     return list_result
 
 
+liste_learner = generate_fake_learner()
+
+
 # region room
 
 
-def generate_fake_room(nb_rooms=NBR_ROOM):
+def generate_fake_room(nb_rooms=NBR_ROOM, stuff_dict=STUFF_DICT):
     list_result = []
     for _ in range(nb_rooms):
+        for key in stuff_dict.keys():
+            stuff_dict[key] = faker.boolean()
         room = RoomCreate(
             name=faker.name(),
-            capacity=faker.pyint(),
-            localization=faker.building_name(),
-            stuff=faker.sentence(4, True),
+            capacity=faker.pyint(1, 35),
+            localization=faker.word(),
+            stuff=stuff_dict,
             is_active=faker.pyint(0, 1),
         )
         list_result.append(room)
     return list_result
 
+
+# liste_room = generate_fake_room()
 
 # region session
 
@@ -132,14 +182,23 @@ def generate_fake_session(nb_sessions=NBR_SESSION):
     list_result = []
     list_status = ["OPEN", "CLOSED", "ARCHIVED"]
     for _ in range(nb_sessions):
+        # create a list of requirement, random number between 1 and 7
+        list_requirements = []
+        for _ in range(faker.pyint(1, 7)):
+            list_requirements.append(faker.word())
+
+        # create dates outside of objet because end_date needs start_date
+        start_date = faker.date_object()
+        end_date = faker.date_between_dates(date_start=start_date)
+
         session = SessionCreate(
             title=faker.sentence(5, True),
             description=faker.sentence(14, True),
-            start_date=faker.date(),
-            end_date=faker.date(),
+            start_date=start_date,
+            end_date=end_date,
             max_capacity=faker.pyint(),
             status=random_element_list(list_status),
-            # requirements = ,
+            requirements=list_requirements,
             id_trainer=faker.pyint(1, NBR_TRAINER),
             id_room=faker.pyint(1, NBR_ROOM),
         )
@@ -147,13 +206,19 @@ def generate_fake_session(nb_sessions=NBR_SESSION):
     return list_result
 
 
+# liste_session = generate_fake_session()
+
 # region teachin
 
 
-def generate_fake_teachingstaff(nb_teachingstaff=NBR_TEACHINGSTAFF):
+def generate_fake_teachingstaff(
+    nb_teachingstaff=NBR_TEACHINGSTAFF, dict_responsibilities=STAFF_RESPONSIBILITIES
+):
     list_result = []
     list_role = ["RESPONSABLE PEDAGOGIQUE", "RESPONSABLE PEDAGOGIQUE"]
     for _ in range(nb_teachingstaff):
+        for key in dict_responsibilities.keys():
+            dict_responsibilities[key] = faker.boolean()
         user_attributes = generate_fake_user()
         teachingStaff = TeachingStaffCreate(
             **user_attributes,
@@ -161,11 +226,13 @@ def generate_fake_teachingstaff(nb_teachingstaff=NBR_TEACHINGSTAFF):
             id_user=faker.pyint(1, NBR_USER),
             work=random_element_list(list_role),
             date_appointement=faker.date(),
-            # responsabilities = faker.
+            responsabilities=dict_responsibilities,
         )
         list_result.append(teachingStaff)
     return list_result
 
+
+# list_teachingstaff = generate_fake_teachingstaff()
 
 # region trainer
 
@@ -180,8 +247,11 @@ def generate_fake_trainer(nb_trainers=NBR_TRAINER):
             id_user=faker.pyint(1, NBR_USER),
             speciality=faker.word(),
             date_hire=faker.date(),
-            hourly_rate=faker.pyfloat(),
+            hourly_rate=faker.pyfloat(min_value=0),
             bio=faker.sentence(10, True),
         )
         list_result.append(trainer)
     return list_result
+
+
+# list_trainer = generate_fake_trainer()
