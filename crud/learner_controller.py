@@ -27,7 +27,39 @@ def add_learner(learner_obj: LearnerCreate, session_add_learner) -> None:
         print("-" * 25)
 
 
+# region read
+
+
 def get_learner(session) -> LearnerCreate:
     results = session.exec(select(Learner)).all()
     all_learner = [LearnerCreate(**item.model_dump()) for item in results]
     return all_learner
+
+
+# region delete
+
+
+def delete_learner_by_attr(attri: str, value: any, session) -> bool:
+    try:
+        learner = (
+            session.exec(select(Learner))
+            .filter(getattr(Learner, attri) == value)
+            .first()
+        )
+        if learner:
+            learner_name = learner.name
+            session.delete(learner)
+            session.commit()
+            print(f"Apprenant supprimé : {learner_name}")
+            return True
+        else:
+            print(
+                f"Aucun apprenant trouvé avec l'attribut: {attri} ayant la valeur : {value}"
+            )
+            return False
+    except Exception as exc:
+        print("-" * 25)
+        print("Erreur lors de la suppression de l'apprenant'")
+        print(f"Exception: {exc}")
+        print("-" * 25)
+        return False

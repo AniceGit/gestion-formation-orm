@@ -60,7 +60,7 @@ def delete_room_by_attr(attri: str, value: any, session) -> bool:
             return True
         else:
             print(
-                f"Aucune salle trouvée avec l'attribut: {attri} et la valeur : {value}"
+                f"Aucune salle trouvée avec l'attribut: {attri} ayant la valeur : {value}"
             )
             return False
     except Exception as exc:

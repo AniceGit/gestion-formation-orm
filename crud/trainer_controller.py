@@ -27,7 +27,34 @@ def add_trainer(trainer_obj: TrainerCreate, session_add_trainer) -> None:
         print("-" * 25)
 
 
+# region read
+
+
 def get_trainer(session) -> TrainerCreate:
     results = session.exec(select(Trainer)).all()
     all_learner = [TrainerCreate(**item.model_dump()) for item in results]
     return all_learner
+
+# region delete
+
+
+def delete_trainer_by_attr(attri: str, value: any, session) -> bool:
+    try:
+        trainer = session.exec(select(Trainer)).filter(getattr(Trainer, attri) == value).first()
+        if trainer:
+            trainer_name = trainer.name
+            session.delete(trainer)
+            session.commit()
+            print(f"Formateur supprimé : {trainer_name}")
+            return True
+        else:
+            print(
+                f"Aucune formateur trouvée avec l'attribut: {attri} ayant la valeur : {value}"
+            )
+            return False
+    except Exception as exc:
+        print("-" * 25)
+        print("Erreur lors de la suppression du formateur")
+        print(f"Exception: {exc}")
+        print("-" * 25)
+        return False

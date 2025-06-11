@@ -29,7 +29,39 @@ def add_teachingstaff(
         print("-" * 25)
 
 
+# region read
+
+
 def get_teachingstaff(session) -> TeachingStaffCreate:
     results = session.exec(select(TeachingStaff)).all()
-    all_learner = [TeachingStaffCreate(**item.model_dump()) for item in results]
-    return all_learner
+    all_teachingstaff = [TeachingStaffCreate(**item.model_dump()) for item in results]
+    return all_teachingstaff
+
+
+# region delete
+
+
+def delete_teachingstaff_by_attr(attri: str, value: any, session) -> bool:
+    try:
+        teachingstaff = (
+            session.exec(select(TeachingStaff))
+            .filter(getattr(TeachingStaff, attri) == value)
+            .first()
+        )
+        if teachingstaff:
+            teachingstaff_name = teachingstaff.name
+            session.delete(teachingstaff)
+            session.commit()
+            print(f"Staff pédago supprimé : {teachingstaff_name}")
+            return True
+        else:
+            print(
+                f"Aucun staff pédago trouvé avec l'attribut: {attri} ayant la valeur : {value}"
+            )
+            return False
+    except Exception as exc:
+        print("-" * 25)
+        print("Erreur lors de la suppression du staff pédago")
+        print(f"Exception: {exc}")
+        print("-" * 25)
+        return False
