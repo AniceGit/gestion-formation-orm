@@ -21,3 +21,20 @@ def add_room(room_obj: RoomCreate, session_add_room) -> None:
         print("La salle n'a pas été ajoutée")
         print(f"Exception: {exc}")
         print("-" * 25)
+
+
+def get_all_rooms_as_create(session) -> list[RoomCreate]:
+    try:
+        list_result = []
+        # list of all Room in session
+        rooms = session.query(Room).all()
+        # Conversion Room -> RoomCreate
+        for room in rooms:
+            create_room = RoomCreate(**room.model_dump())
+            list_result.append(create_room)
+    except Exception as exc:
+        print("-" * 25)
+        print("Erreur lors de la lecture des salles")
+        print(f"Exception: {exc}")
+        print("-" * 25)
+        return []

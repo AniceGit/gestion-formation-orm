@@ -5,6 +5,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from models.inscription import Inscription
 from schemas.inscription_schemas import InscriptionCreate
 
+# region create
+
 
 def add_inscription(
     inscription_obj: InscriptionCreate, session_add_inscription
@@ -23,3 +25,23 @@ def add_inscription(
         print("L'inscription n'a pas été ajoutée")
         print(f"Exception: {exc}")
         print("-" * 25)
+
+
+# region read
+
+
+def get_all_inscriptions_as_create(session) -> list[InscriptionCreate]:
+    try:
+        list_result = []
+        # list of all Inscription in session
+        inscriptions = session.query(Inscription).all()
+        # Conversion Inscription -> InscriptionCreate
+        for inscription in inscriptions:
+            create_inscription = InscriptionCreate(**inscription.model_dump())
+            list_result.append(create_inscription)
+    except Exception as exc:
+        print("-" * 25)
+        print("Erreur lors de la lecture des inscriptions")
+        print(f"Exception: {exc}")
+        print("-" * 25)
+        return []
