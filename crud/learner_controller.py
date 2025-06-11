@@ -8,16 +8,7 @@ from schemas.learner_schemas import LearnerCreate
 
 def add_learner(learner_obj: LearnerCreate, session_add_learner) -> None:
     try:
-        new_user = Learner(
-            name=learner_obj.name,
-            firstname=learner_obj.firstname,
-            email=learner_obj.email,
-            birth_date=learner_obj.birth_date,
-            date_create=learner_obj.date_create,
-            role=learner_obj.role,
-            phone=learner_obj.phone,
-            platform_registration_date=learner_obj.platform_registration_date,
-        )
+        new_user = Learner(**learner_obj.model_dump())
 
         session_add_learner.add(new_user)
         session_add_learner.commit()

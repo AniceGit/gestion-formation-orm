@@ -10,7 +10,7 @@ import datetime as date
 
 class TrainerCreate(us_sche.UserCreate):
     speciality: str
-    date_hire: date.date = Field(None, lt=date.date.today())
+    date_hire: date.date = Field(None, le=date.date.today())
     hourly_rate: Annotated[float, Field(ge=0.0)]
     bio: Annotated[Optional[str], StringConstraints(max_length=50)] = None
 
