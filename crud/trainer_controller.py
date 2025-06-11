@@ -2,7 +2,7 @@ import os, sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.trainer import Trainer
-from db.database import engine
+from sqlmodel import select
 from schemas.trainer_schemas import TrainerCreate
 
 
@@ -22,3 +22,9 @@ def add_trainer(trainer_obj: TrainerCreate, session_add_trainer) -> None:
         print("L'utilisateur n'a pas été ajouté")
         print(f"Exception: {exc}")
         print("-" * 25)
+
+
+def get_trainer(session) -> TrainerCreate:
+    results = session.exec(select(Trainer)).all()
+    all_learner = [TrainerCreate(**item.model_dump()) for item in results]
+    return all_learner

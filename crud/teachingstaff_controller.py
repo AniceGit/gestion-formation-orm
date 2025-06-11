@@ -2,7 +2,7 @@ import os, sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.teachingstaff import TeachingStaff
-from db.database import engine
+from sqlmodel import select
 from schemas.teachingstaff_schemas import TeachingStaffCreate
 
 
@@ -24,3 +24,9 @@ def add_teachingstaff(
         print("L'utilisateur n'a pas été ajouté")
         print(f"Exception: {exc}")
         print("-" * 25)
+
+
+def get_teachingstaff(session) -> TeachingStaffCreate:
+    results = session.exec(select(TeachingStaff)).all()
+    all_learner = [TeachingStaffCreate(**item.model_dump()) for item in results]
+    return all_learner

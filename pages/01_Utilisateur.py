@@ -36,35 +36,76 @@ def display():
     st.set_page_config(page_title="Utilisateur")
 
     st.title("Page de création d'un utilisateur")
+    crud_options = [
+        "Créer",
+        "Afficher",
+        "Modifier",
+        "Supprimer",
+    ]
+    with st.expander("Choisissez votre objectif"):
+        crud_choice = st.radio("", crud_options)
 
     options = [role.value for role in UserRole]
     # Choose actions to do
     with st.expander("Choisissez un rôle"):
         choice_role = st.radio("", options)
 
-    define_role(choice_role)
+    define_choice(choice_role, crud_choice)
 
 
-def define_role(choice_role: str):
+def define_choice(choice_role: str, crud_choice: str):
     """_summary_
 
     Args:
         choice_role (int): _description_
     """
     if choice_role == "Learner":
-        st.subheader("Création d'un nouvelle apprenant")
-        new_learner()
+        if crud_choice == "Créer":
+            st.subheader("Création d'un nouvelle apprenant")
+            new_learner()
+        elif crud_choice == "Afficher":
+            st.subheader("Affichage des apprenants")
+            show_learner()
+        elif crud_choice == "Modifier":
+            pass
+        elif crud_choice == "Supprimer":
+            pass
     elif choice_role == "Trainer":
-        st.subheader("Création d'un nouvelle enseignant")
-        new_trainer()
+        if crud_choice == "Créer":
+            st.subheader("Création d'un nouvelle enseignant")
+            new_trainer()
+        elif crud_choice == "Afficher":
+            st.subheader("Affichage des enseignants")
+            show_trainer()
+        elif crud_choice == "Modifier":
+            pass
+        elif crud_choice == "Supprimer":
+            pass
     elif choice_role == "TeachingStaff":
-        st.subheader("Création d'un nouveau staff pédagogique")
-        new_teachingstaff()
+        if crud_choice == "Créer":
+            st.subheader("Création d'un nouveau staff pédagogique")
+            new_teachingstaff()
+        elif crud_choice == "Afficher":
+            st.subheader("Affichage des staff pédagogique")
+            show_teachingstaff()
+        elif crud_choice == "Modifier":
+            pass
+        elif crud_choice == "Supprimer":
+            pass
     elif choice_role == "Admin":
-        st.subheader("Création d'un nouvelle admin")
-        new_admin()
+        if crud_choice == "Créer":
+            st.subheader("Création d'un nouvelle admin")
+            new_admin()
+        elif crud_choice == "Afficher":
+            st.subheader("Affichage des administrateurs")
+            show_admin()
+        elif crud_choice == "Modifier":
+            pass
+        elif crud_choice == "Supprimer":
+            pass
 
 
+# Create
 def new_user():
     name = st.text_input("Insérer votre nom")
     firstname = st.text_input("Insérer votre prénom")
@@ -177,7 +218,7 @@ def new_admin():
     with st.form("create_user"):
         info_user_dict = new_user()
         role = "Admin"
-        options = admin_contr.find_adminrole(connect_to_session())
+        options = admin_contr.get_adminrole(connect_to_session())
         option_role = [value.replace("_", " ").title() for _, value in options.items()]
         # Choose work
         with st.expander("Choisissez votre travail"):
@@ -202,6 +243,48 @@ def new_admin():
             st.write("Création de l'utilisateur")
         except:
             st.error("Une erreur est survenue. Vérifier vos informations.")
+
+
+# Read
+def show_learner():
+    learners = learn_contr.get_learner(connect_to_session())
+    for learner in learners:
+        with st.expander(f"{learner.firstname} {learner.name}"):
+            st.text(f"Prénom : {learner.firstname}")
+            st.text(f"Prénom : {learner.name}")
+            st.text(f"Email : {learner.email}")
+            st.text(
+                f"Date d'inscription sur la plateforme : {learner.platform_registration_date}"
+            )
+
+
+def show_trainer():
+    trainers = train_contr.get_trainer(connect_to_session())
+    for trainer in trainers:
+        with st.expander(f"{trainer.firstname} {trainer.name}"):
+            st.text(f"Prénom : {trainer.firstname}")
+            st.text(f"Prénom : {trainer.name}")
+            st.text(f"Email : {trainer.email}")
+            st.text(f"Date d'embauche : {trainer.date_hire}")
+
+
+def show_teachingstaff():
+    teachingstaffs = teachstaff_contr.get_teachingstaff(connect_to_session())
+    for teachingstaff in teachingstaffs:
+        with st.expander(f"{teachingstaff.firstname} {teachingstaff.name}"):
+            st.text(f"Prénom : {teachingstaff.firstname}")
+            st.text(f"Prénom : {teachingstaff.name}")
+            st.text(f"Email : {teachingstaff.email}")
+
+
+def show_admin():
+    admins = admin_contr.get_admin(connect_to_session())
+    for admin in admins:
+        with st.expander(f"{admin.firstname} {admin.name}"):
+            st.text(f"Prénom : {admin.firstname}")
+            st.text(f"Prénom : {admin.name}")
+            st.text(f"Email : {admin.email}")
+            st.text(f"Date de promotion : {admin.promotion_date}")
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@ import os, sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.learner import Learner
-from db.database import engine
+from sqlmodel import select
 from schemas.learner_schemas import LearnerCreate
 
 
@@ -22,3 +22,9 @@ def add_learner(learner_obj: LearnerCreate, session_add_learner) -> None:
         print("L'utilisateur n'a pas été ajouté")
         print(f"Exception: {exc}")
         print("-" * 25)
+
+
+def get_learner(session) -> LearnerCreate:
+    results = session.exec(select(Learner)).all()
+    all_learner = [LearnerCreate(**item.model_dump()) for item in results]
+    return all_learner
