@@ -1,8 +1,8 @@
-import os, sys
+import sys
+import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.learner import Learner
-from db.database import engine
 from schemas.learner_schemas import LearnerCreate
 
 
