@@ -1,5 +1,5 @@
 from pydantic import BaseModel, model_validator
-from typing import Optional
+from typing import Optional, List
 from datetime import date
 from enum import Enum
 
@@ -17,7 +17,7 @@ class SessionCreate(BaseModel):
     end_date: date
     max_capacity: int
     status: StatusEnum = StatusEnum.OPEN
-    requirements: str
+    requirements: List[str]
     id_trainer: int
     id_room: int
 
