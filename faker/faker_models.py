@@ -4,7 +4,7 @@ import phonenumbers
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import faker as fk
-from random import shuffle, choice
+from random import shuffle
 from config import (
     NBR_ADMIN,
     NBR_INSCRIPTION,

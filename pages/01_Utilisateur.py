@@ -269,12 +269,12 @@ def show_trainer():
 
 
 def show_teachingstaff():
-    teachingstaffs = teachstaff_contr.get_teachingstaff(connect_to_session())
-    for teachingstaff in teachingstaffs:
-        with st.expander(f"{teachingstaff.firstname} {teachingstaff.name}"):
-            st.text(f"Prénom : {teachingstaff.firstname}")
-            st.text(f"Prénom : {teachingstaff.name}")
-            st.text(f"Email : {teachingstaff.email}")
+    admins = teachstaff_contr.get_teachingstaff(connect_to_session())
+    for admin in admins:
+        with st.expander(f"{admin.firstname} {admin.name}"):
+            st.text(f"Prénom : {admin.firstname}")
+            st.text(f"Prénom : {admin.name}")
+            st.text(f"Email : {admin.email}")
 
 
 def show_admin():

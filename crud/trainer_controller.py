@@ -1,9 +1,12 @@
-import os, sys
+import sys
+import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.trainer import Trainer
 from sqlmodel import select
 from schemas.trainer_schemas import TrainerCreate
+
+# region create
 
 
 def add_trainer(trainer_obj: TrainerCreate, session_add_trainer) -> None:

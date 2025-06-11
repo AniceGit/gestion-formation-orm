@@ -1,9 +1,12 @@
-import os, sys
+import sys
+import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.learner import Learner
 from sqlmodel import select
 from schemas.learner_schemas import LearnerCreate
+
+# region create
 
 
 def add_learner(learner_obj: LearnerCreate, session_add_learner) -> None:
