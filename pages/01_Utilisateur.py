@@ -69,7 +69,8 @@ def define_choice(choice_role: str, crud_choice: str):
         elif crud_choice == "Modifier":
             pass
         elif crud_choice == "Supprimer":
-            pass
+            st.subheader("Supprimer un apprenant")
+            delete_learner()
     elif choice_role == "Trainer":
         if crud_choice == "Créer":
             st.subheader("Création d'un nouvelle enseignant")
@@ -80,6 +81,7 @@ def define_choice(choice_role: str, crud_choice: str):
         elif crud_choice == "Modifier":
             pass
         elif crud_choice == "Supprimer":
+            st.subheader("Supprimer un enseignant")
             pass
     elif choice_role == "TeachingStaff":
         if crud_choice == "Créer":
@@ -91,6 +93,7 @@ def define_choice(choice_role: str, crud_choice: str):
         elif crud_choice == "Modifier":
             pass
         elif crud_choice == "Supprimer":
+            st.subheader("Supprimer un staff pédagogique")
             pass
     elif choice_role == "Admin":
         if crud_choice == "Créer":
@@ -102,6 +105,7 @@ def define_choice(choice_role: str, crud_choice: str):
         elif crud_choice == "Modifier":
             pass
         elif crud_choice == "Supprimer":
+            st.subheader("Supprimer un admin")
             pass
 
 
@@ -285,6 +289,50 @@ def show_admin():
             st.text(f"Prénom : {admin.name}")
             st.text(f"Email : {admin.email}")
             st.text(f"Date de promotion : {admin.promotion_date}")
+
+
+# Delete
+def delete_learner():
+    with st.form("delete_user"):
+        email = st.text_input("Insérer votre email")
+        submit_coo = st.form_submit_button("Valider")
+
+    if submit_coo:
+        try:
+            learn_contr.del_learner(email, connect_to_session())
+            st.write("Utilisateur supprimé")
+        except:
+            st.error("L'email n'existe pas en base")
+
+
+def delete_trainer():
+    with st.form("delete_user"):
+        email = st.text_input("Insérer votre email")
+        submit_coo = st.form_submit_button("Valider")
+
+    if submit_coo:
+        try:
+            train_contr.del_trainer(email, connect_to_session())
+            st.write("Utilisateur supprimé")
+        except:
+            st.error("L'email n'existe pas en base")
+
+
+def delete_teachingstaff():
+    with st.form("delete_user"):
+        email = st.text_input("Insérer votre email")
+        submit_coo = st.form_submit_button("Valider")
+
+    if submit_coo:
+        try:
+            teachstaff_contr.del_teachingstaff(email, connect_to_session())
+            st.write("Utilisateur supprimé")
+        except:
+            st.error("L'email n'existe pas en base")
+
+
+def delete_admin():
+    pass
 
 
 if __name__ == "__main__":

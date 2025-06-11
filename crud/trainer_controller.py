@@ -31,3 +31,13 @@ def get_trainer(session) -> TrainerCreate:
     results = session.exec(select(Trainer)).all()
     all_learner = [TrainerCreate(**item.model_dump()) for item in results]
     return all_learner
+
+
+def del_trainer(email: str, session):
+    statement = select(Trainer).where(Trainer.email == email)
+    trainer_user = session.exec(statement).first()
+    if trainer_user:
+        session.delete(trainer_user)
+        session.commit()
+    else:
+        raise ValueError(f"Aucun admin avec l'email : {email}")

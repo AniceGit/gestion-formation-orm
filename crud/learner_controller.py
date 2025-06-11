@@ -31,3 +31,13 @@ def get_learner(session) -> LearnerCreate:
     results = session.exec(select(Learner)).all()
     all_learner = [LearnerCreate(**item.model_dump()) for item in results]
     return all_learner
+
+
+def del_learner(email: str, session):
+    statement = select(Learner).where(Learner.email == email)
+    learner = session.exec(statement).first()
+    if learner:
+        session.delete(learner)
+        session.commit()
+    else:
+        raise ValueError(f"Aucun admin avec l'email : {email}")

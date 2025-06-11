@@ -33,3 +33,13 @@ def get_teachingstaff(session) -> TeachingStaffCreate:
     results = session.exec(select(TeachingStaff)).all()
     all_learner = [TeachingStaffCreate(**item.model_dump()) for item in results]
     return all_learner
+
+
+def del_teachingstaff(email: str, session):
+    statement = select(TeachingStaff).where(TeachingStaff.email == email)
+    teachingstaff_user = session.exec(statement).first()
+    if teachingstaff_user:
+        session.delete(teachingstaff_user)
+        session.commit()
+    else:
+        raise ValueError(f"Aucun admin avec l'email : {email}")
