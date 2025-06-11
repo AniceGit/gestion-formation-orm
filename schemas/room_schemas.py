@@ -8,3 +8,8 @@ class RoomCreate(BaseModel):
     localization: str
     stuff: Dict[str, Any]
     is_active: bool = True
+
+    class Config:
+        str_strip_whitespace = True
+        str_to_lower = True
+        frozen = True

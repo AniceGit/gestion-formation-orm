@@ -26,3 +26,8 @@ class SessionCreate(BaseModel):
         if self.end_date <= self.start_date:
             raise ValueError("end_date must be after start_date")
         return self
+
+    class Config:
+        str_strip_whitespace = True
+        str_to_lower = True
+        frozen = True

@@ -3,6 +3,7 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.teachingstaff import TeachingStaff
+from sqlmodel import select
 from schemas.teachingstaff_schemas import TeachingStaffCreate
 
 # region create
@@ -28,21 +29,7 @@ def add_teachingstaff(
         print("-" * 25)
 
 
-# region read
-
-
-def get_all_teachingstaff_as_create(session) -> list[TeachingStaffCreate]:
-    try:
-        list_result = []
-        # list of all TeachingStaff in session
-        teachingstaffs = session.query(TeachingStaff).all()
-        # Conversion TeachingStaff -> TeachingStaffCreate
-        for teachingstaff in teachingstaffs:
-            create_teachingstaff = TeachingStaffCreate(**teachingstaff.model_dump())
-            list_result.append(create_teachingstaff)
-    except Exception as exc:
-        print("-" * 25)
-        print("Erreur lors de la lecture de l'utilisateur")
-        print(f"Exception: {exc}")
-        print("-" * 25)
-        return []
+def get_teachingstaff(session) -> TeachingStaffCreate:
+    results = session.exec(select(TeachingStaff)).all()
+    all_learner = [TeachingStaffCreate(**item.model_dump()) for item in results]
+    return all_learner

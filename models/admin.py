@@ -7,13 +7,14 @@ import models.user as u
 
 class AdminAdminRoleLink(SQLModel, table=True):
     __tablename__ = "admin_adminrole_link"
+    __table_args__ = {"extend_existing": True}
     admin_id: int = Field(foreign_key="admin.id", primary_key=True)
     role_id: int = Field(foreign_key="admin_role.id", primary_key=True)
 
 
 class AdminRole(SQLModel, table=True):
     __tablename__ = "admin_role"
-    __table_args__ = (UniqueConstraint("name"),)
+    __table_args__ = (UniqueConstraint("name"), {"extend_existing": True})
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str  # e.g. "SUPERADMIN", "ADMIN_STANDARD"
 
