@@ -3,9 +3,11 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.trainer import Trainer
+from sqlmodel import select
 from schemas.trainer_schemas import TrainerCreate
 
-#region create
+# region create
+
 
 def add_trainer(trainer_obj: TrainerCreate, session_add_trainer) -> None:
     try:
@@ -25,20 +27,7 @@ def add_trainer(trainer_obj: TrainerCreate, session_add_trainer) -> None:
         print("-" * 25)
 
 
-# region read
-
-def get_all_trainer_as_create(session) -> list[TrainerCreate]:
-    try:
-        list_result = []
-        # list of all Trainer in session
-        trainers = session.query(Trainer).all()
-        # Conversion Trainer -> TrainerCreate
-        for trainer in trainers:
-            create_trainer = TrainerCreate(**trainer.model_dump())
-            list_result.append(create_trainer)
-    except Exception as exc:
-        print("-" * 25)
-        print("Erreur lors de la lecture de l'utilisateur")
-        print(f"Exception: {exc}")
-        print("-" * 25)
-        return []
+def get_trainer(session) -> TrainerCreate:
+    results = session.exec(select(Trainer)).all()
+    all_learner = [TrainerCreate(**item.model_dump()) for item in results]
+    return all_learner

@@ -17,3 +17,8 @@ class InscriptionCreate(BaseModel):
     presence: Optional[bool] = None
     id_session: int
     id_learner: int
+
+    class Config:
+        str_strip_whitespace = True
+        str_to_lower = True
+        frozen = True
