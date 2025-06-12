@@ -35,18 +35,30 @@ def get_trainer(session) -> TrainerCreate:
     all_learner = [TrainerCreate(**item.model_dump()) for item in results]
     return all_learner
 
+
 # region delete
 
 
-def delete_trainer_by_attr(attri: str, value: any, session) -> bool:
+def delete_trainer_by_attr(attri: str, value: any, session, is_active=True) -> bool:
     try:
-        trainer = session.exec(select(Trainer)).filter(getattr(Trainer, attri) == value).first()
+        trainer = (
+            session.exec(select(Trainer))
+            .filter(getattr(Trainer, attri) == value)
+            .first()
+        )
         if trainer:
-            trainer_name = trainer.name
-            session.delete(trainer)
-            session.commit()
-            print(f"Formateur supprimé : {trainer_name}")
-            return True
+            if is_active:
+                trainer.is_active = False
+                session.add(trainer)
+                session.commit()
+                print(f"Formateur désactivé : {trainer.name}")
+                return True
+            else:
+                trainer_name = trainer.name
+                session.delete(trainer)
+                session.commit()
+                print(f"Formateur supprimé : {trainer_name}")
+                return True
         else:
             print(
                 f"Aucune formateur trouvée avec l'attribut: {attri} ayant la valeur : {value}"
