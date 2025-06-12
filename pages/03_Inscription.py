@@ -38,27 +38,12 @@ def define_choice(crud_choice: str):
     elif crud_choice == "Afficher":
         st.subheader("Affichage des salles")
         show_inscription()
-        st.image("./assets/coming_soon_2.png")
-        st.write(
-            "Le six pack n’est pas seulement le fruit de l’effort physique,"
-            " mais le reflet d’une discipline invisible : celle qui sculpte l’âme avant le corps."
-        )
     elif crud_choice == "Modifier":
         st.subheader("Modification d'une salle")
         update_inscription()
-        st.image("./assets/coming_soon_2.png")
-        st.write(
-            "Le six pack n’est pas seulement le fruit de l’effort physique,"
-            " mais le reflet d’une discipline invisible : celle qui sculpte l’âme avant le corps."
-        )
     elif crud_choice == "Supprimer":
         st.subheader("Supprimer une salle")
         delete_inscription()
-        st.image("./assets/coming_soon_2.png")
-        st.write(
-            "Le six pack n’est pas seulement le fruit de l’effort physique,"
-            " mais le reflet d’une discipline invisible : celle qui sculpte l’âme avant le corps."
-        )
 
 
 # Connect to Session
@@ -125,17 +110,29 @@ def new_inscription():
 
 # Read
 def show_inscription():
-    pass
+    st.image("./assets/coming_soon1.gif")
+    st.write(
+        "Coming soon n’est pas une promesse, c’est un silence chargé d’avenir. "
+        "C’est l’instant suspendu où le présent retient son souffle, où le futur murmure à l’oreille de ceux qui espèrent encore."
+    )
 
 
 # Update
 def update_inscription():
-    pass
+    st.image("./assets/coming_soon1.gif")
+    st.write(
+        "Coming soon n’est pas une promesse, c’est un silence chargé d’avenir. "
+        "C’est l’instant suspendu où le présent retient son souffle, où le futur murmure à l’oreille de ceux qui espèrent encore."
+    )
 
 
 # Delete
 def delete_inscription():
-    pass
+    st.image("./assets/coming_soon1.gif")
+    st.write(
+        "Coming soon n’est pas une promesse, c’est un silence chargé d’avenir. "
+        "C’est l’instant suspendu où le présent retient son souffle, où le futur murmure à l’oreille de ceux qui espèrent encore."
+    )
 
 
 if __name__ == "__main__":

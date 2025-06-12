@@ -32,39 +32,51 @@ def define_choice(crud_choice: str):
     if crud_choice == "Créer":
         st.subheader("Création d'une nouvelle formation")
         new_session()
-        st.image("./assets/coming_soon_1.png")
     elif crud_choice == "Afficher":
         st.subheader("Affichage des salles")
         show_session()
-        st.image("./assets/coming_soon_1.png")
     elif crud_choice == "Modifier":
         st.subheader("Modification d'une salle")
         update_session()
-        st.image("./assets/coming_soon_1.png")
     elif crud_choice == "Supprimer":
         st.subheader("Supprimer une salle")
         delete_session()
-        st.image("./assets/coming_soon_1.png")
 
 
 # Create
 def new_session():
-    pass
+    st.image("./assets/coming_soon1.gif")
+    st.write(
+        "Ce qui vient n’appartient encore à personne. Coming soon est l’antichambre de "
+        "l’inconnu, l’espace où les rêves prennent forme avant d’oser exister."
+    )
 
 
 # Read
 def show_session():
-    pass
+    st.image("./assets/coming_soon1.gif")
+    st.write(
+        "Ce qui vient n’appartient encore à personne. Coming soon est l’antichambre de "
+        "l’inconnu, l’espace où les rêves prennent forme avant d’oser exister."
+    )
 
 
 # Update
 def update_session():
-    pass
+    st.image("./assets/coming_soon1.gif")
+    st.write(
+        "Ce qui vient n’appartient encore à personne. Coming soon est l’antichambre de "
+        "l’inconnu, l’espace où les rêves prennent forme avant d’oser exister."
+    )
 
 
 # Delete
 def delete_session():
-    pass
+    st.image("./assets/coming_soon1.gif")
+    st.write(
+        "Ce qui vient n’appartient encore à personne. Coming soon est l’antichambre de "
+        "l’inconnu, l’espace où les rêves prennent forme avant d’oser exister."
+    )
 
 
 if __name__ == "__main__":
