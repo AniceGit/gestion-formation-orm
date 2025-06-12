@@ -52,7 +52,7 @@ Toutes les dépendances sont listées dans requirements.txt.
 - Migrations : Alembic
 - Génération de données : Faker
 
-## 📊 Guide d’utilisation
+## 📊 Guide d’utilisation
 L’application expose une interface web accessible à l’adresse http://localhost:8501. Voici les fonctionnalités principales :
 - Utilisateur
   - add_utilisateur()
