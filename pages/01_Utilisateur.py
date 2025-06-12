@@ -380,7 +380,8 @@ def update_learner():
                 info_user_dict["study_level"] = study_levels
             if phone != "":
                 info_user_dict["phone"] = phone
-            upd_learner = learn_sch.LearnerUpdate(**info_user_dict)
+            filtered_data = {k: v for k, v in info_user_dict.items() if v != ""}
+            upd_learner = learn_sch.LearnerUpdate(**filtered_data)
             learn_contr.upd_learner(upd_learner, connect_to_session())
             st.write("Modification de l'utilisateur")
         except:
@@ -398,7 +399,8 @@ def update_trainer():
         try:
             info_user_dict["speciality"] = speciality
             info_user_dict["hourly_rate"] = hourly_rate
-            upd_learner = train_sch.TrainerUpdate(**info_user_dict)
+            filtered_data = {k: v for k, v in info_user_dict.items() if v != ""}
+            upd_learner = train_sch.TrainerUpdate(**filtered_data)
             train_contr.upd_trainer(upd_learner, connect_to_session())
             st.write("Modification de l'utilisateur")
         except:
@@ -417,7 +419,8 @@ def update_teachingstaff():
     if submit_coo:
         try:
             info_user_dict["work"] = choice_work
-            upd_learner = tstaff_sch.TeachingStaffUpdate(**info_user_dict)
+            filtered_data = {k: v for k, v in info_user_dict.items() if v != ""}
+            upd_learner = tstaff_sch.TeachingStaffUpdate(**filtered_data)
             teachstaff_contr.upd_teachingstaff(upd_learner, connect_to_session())
             st.write("Modification de l'utilisateur")
         except:
@@ -431,7 +434,8 @@ def update_admin():
 
     if submit_coo:
         try:
-            upd_learner = adm_sch.AdminUpdate(**info_user_dict)
+            filtered_data = {k: v for k, v in info_user_dict.items() if v != ""}
+            upd_learner = adm_sch.AdminUpdate(**filtered_data)
             admin_contr.upd_admin(upd_learner, connect_to_session())
             st.write("Modification de l'utilisateur")
         except:

@@ -30,17 +30,21 @@ def display():
 
 def define_choice(crud_choice: str):
     if crud_choice == "Créer":
-        st.subheader("Création d'une nouvelle salle")
+        st.subheader("Création d'une nouvelle formation")
         new_session()
+        st.image("./assets/coming_soon_1.png")
     elif crud_choice == "Afficher":
         st.subheader("Affichage des salles")
         show_session()
+        st.image("./assets/coming_soon_1.png")
     elif crud_choice == "Modifier":
         st.subheader("Modification d'une salle")
         update_session()
+        st.image("./assets/coming_soon_1.png")
     elif crud_choice == "Supprimer":
         st.subheader("Supprimer une salle")
         delete_session()
+        st.image("./assets/coming_soon_1.png")
 
 
 # Create

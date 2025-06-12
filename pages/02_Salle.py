@@ -64,7 +64,7 @@ def define_room():
 
 def new_room():
     stuffs = st.number_input("Nombre d'équipements", min_value=0, max_value=10, value=0)
-    with st.form("create_user"):
+    with st.form("create_room"):
         info_room_dict = define_room()
         stuffs_dict = {}
         for i in range(stuffs):
@@ -99,7 +99,31 @@ def show_room():
 
 # Update
 def update_room():
-    pass
+    stuffs = st.number_input("Nombre d'équipements", min_value=0, max_value=10, value=0)
+    with st.form("update_room"):
+        info_room_dict = define_room()
+        stuffs_dict = {}
+        for i in range(stuffs):
+            key = st.text_input(f"Type d'équipement #{i+1}", key=f"key_{i}")
+            value = st.number_input(
+                f"Nombre d'équipement #{i+1}", min_value=1, key=f"value_{i}"
+            )
+            if key:
+                stuffs_dict[key] = value
+        submit_coo = st.form_submit_button("Valider")
+
+    if submit_coo:
+        try:
+            if stuffs_dict != {}:
+                info_room_dict["stuff"] = stuffs_dict
+            filtered_data = {
+                k: v for k, v in info_room_dict.items() if v != "" and v != 1
+            }
+            new_room_object = room_sch.RoomUpdate(**filtered_data)
+            room_contr.upd_room(new_room_object, connect_to_session())
+            st.write("Modification de la salle")
+        except:
+            st.error("Une erreur est survenue. Vérifier vos informations.")
 
 
 # Delete

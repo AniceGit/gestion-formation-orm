@@ -31,6 +31,7 @@ def get_learner(session) -> LearnerCreate:
     statement = select(Learner).where(Learner.is_active == True)
     results = session.exec(statement).all()
     all_learner = [LearnerCreate(**item.model_dump()) for item in results]
+    print(f"_________________________ Learner = {all_learner}")
     return all_learner
 
 
