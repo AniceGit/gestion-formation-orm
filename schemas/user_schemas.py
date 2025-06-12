@@ -11,6 +11,8 @@ from typing import Optional
 
 
 class UserCreate(BaseModel):
+    """Schema pour créer un utilisateur."""
+
     name: Annotated[str, StringConstraints(max_length=50)]
     firstname: Annotated[str, StringConstraints(max_length=50)]
     email: EmailStr = Field(unique=True)
@@ -25,6 +27,8 @@ class UserCreate(BaseModel):
 
 
 class UserUpdate(BaseModel):
+    """Schema pour mettre à jour un utilisateur."""
+
     name: Optional[str] = None
     firstname: Optional[str] = None
     email: EmailStr = Field(unique=True)

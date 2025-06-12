@@ -12,6 +12,8 @@ class UserRole(str, Enum):
 
 
 class User(SQLModel, table=False):
+    """Base model for users, used as a parent class for other user types"""
+
     __tablename__ = "user"
     __table_args__ = (UniqueConstraint("email"),)
     id: int | None = Field(default=None, primary_key=True)

@@ -10,6 +10,19 @@ from schemas.trainer_schemas import TrainerCreate
 
 
 def add_trainer(trainer_obj: TrainerCreate, session_add_trainer) -> None:
+    """
+    Ajoute un enseignant à la base de données.
+
+    Args:
+        trainer_obj (TrainerCreate): L'objet d'enseignant à ajouter.
+        session_add_trainer: La session de base de données pour l'ajout.
+
+    Raises:
+        Exception: Si une erreur se produit lors de l'ajout de l'enseignant.
+
+    Returns:
+        None
+    """
     try:
         new_user = Trainer(**trainer_obj.model_dump())
 
@@ -31,6 +44,15 @@ def add_trainer(trainer_obj: TrainerCreate, session_add_trainer) -> None:
 
 
 def get_trainer(session) -> TrainerCreate:
+    """
+    Récupère tous les enseignants actifs de la base de données.
+
+    Args:
+        session: La session de base de données pour exécuter la requête.
+
+    Returns:
+        list[TrainerCreate]: Une liste d'objets TrainerCreate contenant les informations des enseignants.
+    """
     statement = select(Trainer).where(Trainer.is_active == True)
     results = session.exec(statement).all()
     all_learner = [TrainerCreate(**item.model_dump()) for item in results]
@@ -38,6 +60,19 @@ def get_trainer(session) -> TrainerCreate:
 
 
 def del_trainer(email: str, session):
+    """
+    Supprime un enseignant de la base de données en le marquant comme inactif.
+
+    Args:
+        email (str): L'email de l'enseignant à supprimer.
+        session: La session de base de données pour exécuter la requête.
+
+    Raises:
+        ValueError: Si aucun enseignant avec l'email spécifié n'est trouvé.
+
+    Returns:
+        None
+    """
     try:
         statement = (
             update(Trainer)
@@ -53,6 +88,19 @@ def del_trainer(email: str, session):
 
 
 def upd_trainer(trainer_obj: Trainer, session_upd_trainer) -> None:
+    """
+    Met à jour les informations d'un enseignant dans la base de données.
+
+    Args:
+        trainer_obj (Trainer): L'objet d'enseignant à mettre à jour.
+        session_upd_trainer: La session de base de données pour la mise à jour.
+
+    Raises:
+        ValueError: Si aucun enseignant avec l'email spécifié n'est trouvé.
+
+    Returns:
+        None
+    """
     try:
         statement = (
             select(Trainer)

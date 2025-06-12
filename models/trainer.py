@@ -4,6 +4,8 @@ import models.user as u
 
 
 class Trainer(u.User, table=True):
+    """Modèle pour les formateurs, hérite de User"""
+
     __tablename__ = "trainer"
     __table_args__ = {"extend_existing": True}
     speciality: str  # required field

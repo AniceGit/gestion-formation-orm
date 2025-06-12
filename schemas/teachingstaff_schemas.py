@@ -12,6 +12,7 @@ from schemas import user_schemas as us_sche
 
 
 class TeachingStaffCreate(us_sche.UserCreate):
+    """Schema pour créer un membre du personnel enseignant."""
     work: TeachingStaffRole
     date_appointement: date.date = Field(None, le=date.date.today())
     responsabilities: Optional[Dict[str, Any]]
@@ -24,6 +25,7 @@ class TeachingStaffCreate(us_sche.UserCreate):
 
 
 class TeachingStaffUpdate(us_sche.UserUpdate):
+    """Schema pour mettre à jour un membre du personnel enseignant."""
     work: Optional[TeachingStaffRole] = None
 
     class Config:

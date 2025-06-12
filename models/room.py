@@ -5,6 +5,8 @@ from sqlalchemy import Column, JSON
 
 
 class Room(SQLModel, table=True):
+    """Modèle pour les salles de formation"""
+
     __tablename__ = "room"
     __table_args__ = (UniqueConstraint("name"), {"extend_existing": True})
     id: int = Field(default=None, primary_key=True)

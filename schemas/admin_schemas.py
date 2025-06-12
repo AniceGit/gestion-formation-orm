@@ -9,6 +9,8 @@ import datetime as date
 
 
 class AdminAdminRoleLinkCreate(BaseModel):
+    """Schema pour créer une liaison entre un administrateur et un rôle."""
+
     admin_id: int = Field(...)
     role_id: int = Field(...)
 
@@ -19,6 +21,8 @@ class AdminAdminRoleLinkCreate(BaseModel):
 
 
 class AdminRoleCreate(BaseModel):
+    """Schema pour créer un rôle d'administrateur."""
+
     name: Annotated[str, StringConstraints(max_length=50)]
 
     class Config:
@@ -28,6 +32,8 @@ class AdminRoleCreate(BaseModel):
 
 
 class AdminCreate(us_sche.UserCreate):
+    """Schema pour créer un administrateur."""
+
     access_level: List[int]  # list of AdminRole:id
     promotion_date: date.date
 
@@ -38,6 +44,7 @@ class AdminCreate(us_sche.UserCreate):
 
 
 class AdminUpdate(us_sche.UserUpdate):
+    """Schema pour mettre à jour un administrateur."""
 
     class Config:
         str_strip_whitespace = True

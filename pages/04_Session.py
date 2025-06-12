@@ -14,6 +14,7 @@ from sqlmodel import Session
 
 
 def display():
+    """Affiche la page des sessions"""
     st.set_page_config(page_title="Salle")
 
     st.title("Page des sessions")
@@ -29,6 +30,7 @@ def display():
 
 
 def define_choice(crud_choice: str):
+    """Définit l'action à effectuer en fonction du choix de l'utilisateur"""
     if crud_choice == "Créer":
         st.subheader("Création d'une nouvelle formation")
         new_session()
@@ -45,6 +47,7 @@ def define_choice(crud_choice: str):
 
 # Create
 def new_session():
+    """Définit les informations de la session"""
     st.image("./assets/coming_soon1.gif")
     st.write(
         "Ce qui vient n’appartient encore à personne. Coming soon est l’antichambre de "
@@ -54,6 +57,7 @@ def new_session():
 
 # Read
 def show_session():
+    """Affiche les informations de la session"""
     st.image("./assets/coming_soon1.gif")
     st.write(
         "Ce qui vient n’appartient encore à personne. Coming soon est l’antichambre de "
@@ -63,6 +67,7 @@ def show_session():
 
 # Update
 def update_session():
+    """Met à jour les informations de la session"""
     st.image("./assets/coming_soon1.gif")
     st.write(
         "Ce qui vient n’appartient encore à personne. Coming soon est l’antichambre de "
@@ -72,6 +77,7 @@ def update_session():
 
 # Delete
 def delete_session():
+    """Supprime les informations de la session"""
     st.image("./assets/coming_soon1.gif")
     st.write(
         "Ce qui vient n’appartient encore à personne. Coming soon est l’antichambre de "

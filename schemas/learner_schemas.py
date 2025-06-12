@@ -10,6 +10,8 @@ import datetime as date
 
 
 class LearnerCreate(us_sche.UserCreate):
+    """Schema pour créer un apprenant."""
+
     study_level: Optional[str] = None  # unrequired field
     phone: Optional[PhoneNumber] = None  # unrequired field
     platform_registration_date: date.date = Field(default=date.datetime.now())
@@ -21,6 +23,8 @@ class LearnerCreate(us_sche.UserCreate):
 
 
 class LearnerUpdate(us_sche.UserUpdate):
+    """Schema pour mettre à jour un apprenant."""
+
     study_level: Optional[str] = None  # unrequired field
     phone: Optional[PhoneNumber] = None  # unrequired field
 

@@ -14,6 +14,7 @@ from sqlmodel import Session
 
 
 def display():
+    """Affiche la page des salles"""
     st.set_page_config(page_title="Salle")
 
     st.title("Page des salles")
@@ -30,6 +31,7 @@ def display():
 
 
 def define_choice(crud_choice: str):
+    """Définit l'action à effectuer en fonction du choix de l'utilisateur"""
     if crud_choice == "Créer":
         st.subheader("Création d'une nouvelle salle")
         new_room()
@@ -46,11 +48,13 @@ def define_choice(crud_choice: str):
 
 # Connect to Session
 def connect_to_session():
+    """Connection à la base de données"""
     return Session(engine)
 
 
 # Create
 def define_room():
+    """Définit les informations de la salle"""
     name = st.text_input("Insérer le nom")
     capacity = st.number_input("Insérer votre capacité", min_value=1)
     localization = st.text_input("Insérer la localisation")
@@ -63,14 +67,15 @@ def define_room():
 
 
 def new_room():
+    """Création d'une nouvelle salle"""
     stuffs = st.number_input("Nombre d'équipements", min_value=0, max_value=10, value=0)
     with st.form("create_room"):
         info_room_dict = define_room()
         stuffs_dict = {}
         for i in range(stuffs):
-            key = st.text_input(f"Type d'équipement #{i+1}", key=f"key_{i}")
+            key = st.text_input(f"Type d'équipement #{i + 1}", key=f"key_{i}")
             value = st.number_input(
-                f"Nombre d'équipement #{i+1}", min_value=1, key=f"value_{i}"
+                f"Nombre d'équipement #{i + 1}", min_value=1, key=f"value_{i}"
             )
             if key:
                 stuffs_dict[key] = value
@@ -89,6 +94,7 @@ def new_room():
 
 # Read
 def show_room():
+    """Affichage des salles"""
     rooms = room_contr.get_all_rooms_as_create(connect_to_session())
     for room in rooms:
         with st.expander(f"{room.name}"):
@@ -99,14 +105,15 @@ def show_room():
 
 # Update
 def update_room():
+    """Modification d'une salle"""
     stuffs = st.number_input("Nombre d'équipements", min_value=0, max_value=10, value=0)
     with st.form("update_room"):
         info_room_dict = define_room()
         stuffs_dict = {}
         for i in range(stuffs):
-            key = st.text_input(f"Type d'équipement #{i+1}", key=f"key_{i}")
+            key = st.text_input(f"Type d'équipement #{i + 1}", key=f"key_{i}")
             value = st.number_input(
-                f"Nombre d'équipement #{i+1}", min_value=1, key=f"value_{i}"
+                f"Nombre d'équipement #{i + 1}", min_value=1, key=f"value_{i}"
             )
             if key:
                 stuffs_dict[key] = value
@@ -128,6 +135,7 @@ def update_room():
 
 # Delete
 def delete_room():
+    """Suppression d'une salle"""
     rooms = room_contr.get_all_rooms_as_create(connect_to_session())
     info_room = [room.name for room in rooms]
     with st.form("create_room"):

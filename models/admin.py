@@ -6,6 +6,8 @@ import models.user as u
 
 
 class AdminAdminRoleLink(SQLModel, table=True):
+    """Table pour lier les administrateurs aux rôles"""
+
     __tablename__ = "admin_adminrole_link"
     __table_args__ = {"extend_existing": True}
     admin_id: int = Field(foreign_key="admin.id", primary_key=True)
@@ -13,6 +15,8 @@ class AdminAdminRoleLink(SQLModel, table=True):
 
 
 class AdminRole(SQLModel, table=True):
+    """Table pour les rôles d'administrateur"""
+
     __tablename__ = "admin_role"
     __table_args__ = (UniqueConstraint("name"), {"extend_existing": True})
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -20,6 +24,8 @@ class AdminRole(SQLModel, table=True):
 
 
 class Admin(u.User, table=True):
+    """Modèle pour les administrateurs, hérite de User"""
+
     __tablename__ = "admin"
     __table_args__ = {"extend_existing": True}
     promotion_date: date  # required field
