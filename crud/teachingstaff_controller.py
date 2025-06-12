@@ -29,6 +29,9 @@ def add_teachingstaff(
         print("-" * 25)
 
 
+# region read
+
+
 def get_teachingstaff(session) -> TeachingStaffCreate:
     statement = select(TeachingStaff).where(TeachingStaff.is_active == True)
     results = session.exec(statement).all()

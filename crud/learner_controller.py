@@ -27,6 +27,9 @@ def add_learner(learner_obj: LearnerCreate, session_add_learner) -> None:
         print("-" * 25)
 
 
+# region read
+
+
 def get_learner(session) -> LearnerCreate:
     statement = select(Learner).where(Learner.is_active == True)
     results = session.exec(statement).all()

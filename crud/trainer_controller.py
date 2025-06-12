@@ -27,6 +27,9 @@ def add_trainer(trainer_obj: TrainerCreate, session_add_trainer) -> None:
         print("-" * 25)
 
 
+# region read
+
+
 def get_trainer(session) -> TrainerCreate:
     statement = select(Trainer).where(Trainer.is_active == True)
     results = session.exec(statement).all()

@@ -45,3 +45,32 @@ def get_all_sessions_as_create(session_global) -> list[SessionCreate]:
         print(f"Exception: {exc}")
         print("-" * 25)
         return []
+
+
+# region delete
+
+
+def delete_session_by_attr(attri: str, value: any, session) -> bool:
+    try:
+        session = (
+            session.exec(select(Session))
+            .filter(getattr(Session, attri) == value)
+            .first()
+        )
+        if session:
+            session_title = session.title
+            session.delete(session)
+            session.commit()
+            print(f"Session supprimée : {session_title}")
+            return True
+        else:
+            print(
+                f"Aucune session trouvée avec l'attribut: {attri} ayant la valeur : {value}"
+            )
+            return False
+    except Exception as exc:
+        print("-" * 25)
+        print("Erreur lors de la suppression de la session")
+        print(f"Exception: {exc}")
+        print("-" * 25)
+        return False

@@ -24,6 +24,9 @@ def add_room(room_obj: RoomCreate, session_add_room) -> None:
         print("-" * 25)
 
 
+# region read
+
+
 def get_all_rooms_as_create(session) -> list[RoomCreate]:
     try:
         statement = select(Room).where(Room.is_active == True)

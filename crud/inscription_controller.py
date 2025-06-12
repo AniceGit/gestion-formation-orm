@@ -47,3 +47,32 @@ def get_all_inscriptions_as_create(session) -> list[InscriptionCreate]:
         print(f"Exception: {exc}")
         print("-" * 25)
         return []
+
+
+# region delete
+
+
+def delete_inscription_by_attr(attri: str, value: any, session) -> bool:
+    try:
+        inscription = (
+            session.exec(select(Inscription))
+            .filter(getattr(Inscription, attri) == value)
+            .first()
+        )
+        if inscription:
+            inscription_id = inscription.id
+            session.delete(inscription)
+            session.commit()
+            print(f"Inscription supprimée : {inscription_id}")
+            return True
+        else:
+            print(
+                f"Aucune inscription trouvée avec l'attribut: {attri} ayant la valeur : {value}"
+            )
+            return False
+    except Exception as exc:
+        print("-" * 25)
+        print("Erreur lors de la suppression de l'inscription'")
+        print(f"Exception: {exc}")
+        print("-" * 25)
+        return False
