@@ -49,15 +49,22 @@ def get_all_rooms_as_create(session) -> list[RoomCreate]:
 # region delete
 
 
-def delete_room_by_attr(attri: str, value: any, session) -> bool:
+def delete_room_by_attr(attri: str, value: any, session, is_active=True) -> bool:
     try:
         room = session.exec(select(Room)).filter(getattr(Room, attri) == value).first()
         if room:
-            room_name = room.name
-            session.delete(room)
-            session.commit()
-            print(f"Salle supprimée : {room_name}")
-            return True
+            if is_active:
+                room.is_active = False
+                session.add(room)
+                session.commit()
+                print(f"Salle désactivée : {room.name}")
+                return True
+            else:
+                room_name = room.name
+                session.delete(room)
+                session.commit()
+                print(f"Salle supprimée : {room_name}")
+                return True
         else:
             print(
                 f"Aucune salle trouvée avec l'attribut: {attri} ayant la valeur : {value}"

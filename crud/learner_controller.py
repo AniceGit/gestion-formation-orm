@@ -39,7 +39,7 @@ def get_learner(session) -> LearnerCreate:
 # region delete
 
 
-def delete_learner_by_attr(attri: str, value: any, session) -> bool:
+def delete_learner_by_attr(attri: str, value: any, session, is_active=True) -> bool:
     try:
         learner = (
             session.exec(select(Learner))
@@ -47,11 +47,18 @@ def delete_learner_by_attr(attri: str, value: any, session) -> bool:
             .first()
         )
         if learner:
-            learner_name = learner.name
-            session.delete(learner)
-            session.commit()
-            print(f"Apprenant supprimé : {learner_name}")
-            return True
+            if is_active:
+                learner.is_active = False
+                session.add(learner)  # Facultatif mais recommandé
+                session.commit()  # <-- Il faut commit ici !
+                print(f"Apprenant désactivé : {learner.name}")
+                return True
+            else:
+                learner_name = learner.name
+                session.delete(learner)
+                session.commit()
+                print(f"Apprenant supprimé : {learner_name}")
+                return True
         else:
             print(
                 f"Aucun apprenant trouvé avec l'attribut: {attri} ayant la valeur : {value}"

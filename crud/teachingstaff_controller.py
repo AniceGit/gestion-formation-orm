@@ -41,7 +41,9 @@ def get_teachingstaff(session) -> TeachingStaffCreate:
 # region delete
 
 
-def delete_teachingstaff_by_attr(attri: str, value: any, session) -> bool:
+def delete_teachingstaff_by_attr(
+    attri: str, value: any, session, is_active=True
+) -> bool:
     try:
         teachingstaff = (
             session.exec(select(TeachingStaff))
@@ -49,11 +51,18 @@ def delete_teachingstaff_by_attr(attri: str, value: any, session) -> bool:
             .first()
         )
         if teachingstaff:
-            teachingstaff_name = teachingstaff.name
-            session.delete(teachingstaff)
-            session.commit()
-            print(f"Staff pédago supprimé : {teachingstaff_name}")
-            return True
+            if is_active:
+                teachingstaff.is_active = False
+                session.add(teachingstaff)
+                session.commit()
+                print(f"Staff pédago désactivé : {teachingstaff.name}")
+                return True
+            else:
+                teachingstaff_name = teachingstaff.name
+                session.delete(teachingstaff)
+                session.commit()
+                print(f"Staff pédago supprimé : {teachingstaff_name}")
+                return True
         else:
             print(
                 f"Aucun staff pédago trouvé avec l'attribut: {attri} ayant la valeur : {value}"

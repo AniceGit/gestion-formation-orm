@@ -75,3 +75,36 @@ def delete_inscription_by_attr(attri: str, value: any, session) -> bool:
         print(f"Exception: {exc}")
         print("-" * 25)
         return False
+
+
+# region update
+
+
+def update_inscription_by_attr(
+    attri: str, value: any, update_data: dict, session
+) -> bool:
+    try:
+        inscription = (
+            session.exec(select(Inscription))
+            .filter(getattr(Inscription, attri) == value)
+            .first()
+        )
+        if inscription:
+            for key, val in update_data.items():
+                if hasattr(inscription, key):
+                    setattr(inscription, key, val)
+            session.add(inscription)
+            session.commit()
+            print(f"Inscription mise à jour : {inscription.id}")
+            return True
+        else:
+            print(
+                f"Aucune inscription trouvée avec l'attribut: {attri} ayant la valeur : {value}"
+            )
+            return False
+    except Exception as exc:
+        print("-" * 25)
+        print("Erreur lors de la mise à jour de l'inscription")
+        print(f"Exception: {exc}")
+        print("-" * 25)
+        return False
