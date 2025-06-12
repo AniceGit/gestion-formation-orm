@@ -28,10 +28,6 @@ from db.database import engine
 from sqlmodel import Session
 
 
-def connect_to_session():
-    return Session(engine)
-
-
 def display():
     st.set_page_config(page_title="Utilisateur")
 
@@ -67,7 +63,8 @@ def define_choice(choice_role: str, crud_choice: str):
             st.subheader("Affichage des apprenants")
             show_learner()
         elif crud_choice == "Modifier":
-            pass
+            st.subheader("Modification apprenant")
+            update_learner()
         elif crud_choice == "Supprimer":
             st.subheader("Supprimer un apprenant")
             delete_learner()
@@ -79,10 +76,11 @@ def define_choice(choice_role: str, crud_choice: str):
             st.subheader("Affichage des enseignants")
             show_trainer()
         elif crud_choice == "Modifier":
-            pass
+            st.subheader("Modification enseignant")
+            update_trainer()
         elif crud_choice == "Supprimer":
             st.subheader("Supprimer un enseignant")
-            pass
+            delete_trainer()
     elif choice_role == "TeachingStaff":
         if crud_choice == "Créer":
             st.subheader("Création d'un nouveau staff pédagogique")
@@ -91,10 +89,11 @@ def define_choice(choice_role: str, crud_choice: str):
             st.subheader("Affichage des staff pédagogique")
             show_teachingstaff()
         elif crud_choice == "Modifier":
-            pass
+            st.subheader("Modification staff pédagogique")
+            update_teachingstaff()
         elif crud_choice == "Supprimer":
             st.subheader("Supprimer un staff pédagogique")
-            pass
+            delete_teachingstaff()
     elif choice_role == "Admin":
         if crud_choice == "Créer":
             st.subheader("Création d'un nouvelle admin")
@@ -103,10 +102,16 @@ def define_choice(choice_role: str, crud_choice: str):
             st.subheader("Affichage des administrateurs")
             show_admin()
         elif crud_choice == "Modifier":
-            pass
+            st.subheader("Modification admin")
+            update_admin()
         elif crud_choice == "Supprimer":
             st.subheader("Supprimer un admin")
-            pass
+            delete_admin()
+
+
+# Connect to Session
+def connect_to_session():
+    return Session(engine)
 
 
 # Create
@@ -300,7 +305,7 @@ def delete_learner():
     if submit_coo:
         try:
             learn_contr.del_learner(email, connect_to_session())
-            st.write("Utilisateur supprimé")
+            st.write("Utilisateur archivé")
         except:
             st.error("L'email n'existe pas en base")
 
@@ -313,7 +318,7 @@ def delete_trainer():
     if submit_coo:
         try:
             train_contr.del_trainer(email, connect_to_session())
-            st.write("Utilisateur supprimé")
+            st.write("Utilisateur archivé")
         except:
             st.error("L'email n'existe pas en base")
 
@@ -326,13 +331,111 @@ def delete_teachingstaff():
     if submit_coo:
         try:
             teachstaff_contr.del_teachingstaff(email, connect_to_session())
-            st.write("Utilisateur supprimé")
+            st.write("Utilisateur archivé")
         except:
             st.error("L'email n'existe pas en base")
 
 
 def delete_admin():
-    pass
+    with st.form("delete_user"):
+        email = st.text_input("Insérer votre email")
+        submit_coo = st.form_submit_button("Valider")
+
+    if submit_coo:
+        try:
+            admin_contr.del_admin(email, connect_to_session())
+            st.write("Utilisateur archivé")
+        except:
+            st.error("L'email n'existe pas en base")
+
+
+# Update
+def update_user():
+    name = st.text_input("Insérer votre nom")
+    firstname = st.text_input("Insérer votre prénom")
+    email = st.text_input("Insérer le mail de l'utilisateur à modifier")
+
+    info_user_dict = {
+        "name": name,
+        "firstname": firstname,
+        "email": email,
+    }
+    return info_user_dict
+
+
+def update_learner():
+    with st.form("create_user"):
+        info_user_dict = new_user()
+        study_levels = []
+        study_levels = st.multiselect(
+            "Sélectionnez vos niveaux d'étude (optionel)",
+            ["Bac", "Bac+2", "Bac+3", "Master", "Doctorat"],
+        )
+        phone = st.text_input("Insérer votre numéro de téléphone (optionel)")
+        submit_coo = st.form_submit_button("Valider")
+
+    if submit_coo:
+        try:
+            if study_levels != []:
+                info_user_dict["study_level"] = study_levels
+            if phone != "":
+                info_user_dict["phone"] = phone
+            upd_learner = learn_sch.LearnerUpdate(**info_user_dict)
+            learn_contr.upd_learner(upd_learner, connect_to_session())
+            st.write("Modification de l'utilisateur")
+        except:
+            st.error("Une erreur est survenue. Vérifier vos informations.")
+
+
+def update_trainer():
+    with st.form("create_user"):
+        info_user_dict = new_user()
+        speciality = st.text_input("Insérer votre spécialité")
+        hourly_rate = st.number_input("Insérer votre salaire horaire", min_value=0.00)
+        submit_coo = st.form_submit_button("Valider")
+
+    if submit_coo:
+        try:
+            info_user_dict["speciality"] = speciality
+            info_user_dict["hourly_rate"] = hourly_rate
+            upd_learner = train_sch.TrainerUpdate(**info_user_dict)
+            train_contr.upd_trainer(upd_learner, connect_to_session())
+            st.write("Modification de l'utilisateur")
+        except:
+            st.error("Une erreur est survenue. Vérifier vos informations.")
+
+
+def update_teachingstaff():
+    with st.form("create_user"):
+        info_user_dict = new_user()
+        options_work = [work.value for work in TeachingStaffRole]
+        # Choose work
+        with st.expander("Choisissez votre travail"):
+            choice_work = st.radio("", options_work)
+        submit_coo = st.form_submit_button("Valider")
+
+    if submit_coo:
+        try:
+            info_user_dict["work"] = choice_work
+            upd_learner = tstaff_sch.TeachingStaffUpdate(**info_user_dict)
+            teachstaff_contr.upd_teachingstaff(upd_learner, connect_to_session())
+            st.write("Modification de l'utilisateur")
+        except:
+            st.error("Une erreur est survenue. Vérifier vos informations.")
+
+
+def update_admin():
+    with st.form("create_user"):
+        info_user_dict = new_user()
+        submit_coo = st.form_submit_button("Valider")
+
+    if submit_coo:
+        try:
+            upd_learner = adm_sch.AdminUpdate(**info_user_dict)
+            admin_contr.upd_admin(upd_learner, connect_to_session())
+            st.write("Modification de l'utilisateur")
+        except:
+            st.error("Une erreur est survenue. Vérifier vos informations.")
 
 
 if __name__ == "__main__":

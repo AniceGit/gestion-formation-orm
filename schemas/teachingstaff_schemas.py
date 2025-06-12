@@ -21,3 +21,12 @@ class TeachingStaffCreate(us_sche.UserCreate):
         str_strip_whitespace = True
         str_to_lower = True
         frozen = True
+
+
+class TeachingStaffUpdate(us_sche.UserUpdate):
+    work: Optional[TeachingStaffRole] = None
+
+    class Config:
+        str_strip_whitespace = True
+        str_to_lower = True
+        frozen = True

@@ -3,7 +3,7 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.teachingstaff import TeachingStaff
-from sqlmodel import select
+from sqlmodel import select, update
 from schemas.teachingstaff_schemas import TeachingStaffCreate
 
 # region create
@@ -30,16 +30,43 @@ def add_teachingstaff(
 
 
 def get_teachingstaff(session) -> TeachingStaffCreate:
-    results = session.exec(select(TeachingStaff)).all()
+    statement = select(TeachingStaff).where(TeachingStaff.is_active == True)
+    results = session.exec(statement).all()
     all_learner = [TeachingStaffCreate(**item.model_dump()) for item in results]
     return all_learner
 
 
 def del_teachingstaff(email: str, session):
-    statement = select(TeachingStaff).where(TeachingStaff.email == email)
-    teachingstaff_user = session.exec(statement).first()
-    if teachingstaff_user:
-        session.delete(teachingstaff_user)
-        session.commit()
-    else:
-        raise ValueError(f"Aucun admin avec l'email : {email}")
+    try:
+        statement = (
+            update(TeachingStaff)
+            .where(TeachingStaff.email == email)
+            .where(TeachingStaff.is_active == True)
+            .values(is_active=False)
+        )
+        session.exec(statement)
+    except:
+        raise ValueError(f"Aucun staff pédagogique avec l'email : {email}")
+
+
+def upd_teachingstaff(
+    teachingstaff_obj: TeachingStaff, session_upd_teachingstaff
+) -> None:
+    try:
+        statement = (
+            select(TeachingStaff)
+            .where(TeachingStaff.email == teachingstaff_obj.email)
+            .where(TeachingStaff.is_active == True)
+        )
+        teachingstaff_info = session_upd_teachingstaff.exec(statement).first()
+        update_fields = teachingstaff_obj.model_dump(exclude_unset=True)
+
+        for key, value in update_fields.items():
+            setattr(teachingstaff_info, key, value)
+
+        session_upd_teachingstaff.add(teachingstaff_info)
+        session_upd_teachingstaff.commit()
+        session_upd_teachingstaff.close()
+
+    except:
+        raise ValueError(f"Aucun apprenant avec l'email : {teachingstaff_obj}")
