@@ -35,3 +35,11 @@ class AdminCreate(us_sche.UserCreate):
         str_strip_whitespace = True
         str_to_lower = True
         frozen = True
+
+
+class AdminUpdate(us_sche.UserUpdate):
+
+    class Config:
+        str_strip_whitespace = True
+        str_to_lower = True
+        frozen = True

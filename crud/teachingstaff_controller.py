@@ -3,7 +3,7 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.teachingstaff import TeachingStaff
-from sqlmodel import select
+from sqlmodel import select, update
 from schemas.teachingstaff_schemas import TeachingStaffCreate
 
 # region create
@@ -33,44 +33,45 @@ def add_teachingstaff(
 
 
 def get_teachingstaff(session) -> TeachingStaffCreate:
-    results = session.exec(select(TeachingStaff)).all()
-    all_teachingstaff = [TeachingStaffCreate(**item.model_dump()) for item in results]
-    return all_teachingstaff
+    statement = select(TeachingStaff).where(TeachingStaff.is_active == True)
+    results = session.exec(statement).all()
+    all_learner = [TeachingStaffCreate(**item.model_dump()) for item in results]
+    return all_learner
 
 
-# region delete
-
-
-def delete_teachingstaff_by_attr(
-    attri: str, value: any, session, is_active=True
-) -> bool:
+def del_teachingstaff(email: str, session):
     try:
-        teachingstaff = (
-            session.exec(select(TeachingStaff))
-            .filter(getattr(TeachingStaff, attri) == value)
-            .first()
+        statement = (
+            update(TeachingStaff)
+            .where(TeachingStaff.email == email)
+            .where(TeachingStaff.is_active == 1)
+            .values(is_active=0)
         )
-        if teachingstaff:
-            if is_active:
-                teachingstaff.is_active = False
-                session.add(teachingstaff)
-                session.commit()
-                print(f"Staff pédago désactivé : {teachingstaff.name}")
-                return True
-            else:
-                teachingstaff_name = teachingstaff.name
-                session.delete(teachingstaff)
-                session.commit()
-                print(f"Staff pédago supprimé : {teachingstaff_name}")
-                return True
-        else:
-            print(
-                f"Aucun staff pédago trouvé avec l'attribut: {attri} ayant la valeur : {value}"
-            )
-            return False
-    except Exception as exc:
-        print("-" * 25)
-        print("Erreur lors de la suppression du staff pédago")
-        print(f"Exception: {exc}")
-        print("-" * 25)
-        return False
+        session.exec(statement)
+        session.commit()
+        session.close()
+    except:
+        raise ValueError(f"Aucun staff pédagogique avec l'email : {email}")
+
+
+def upd_teachingstaff(
+    teachingstaff_obj: TeachingStaff, session_upd_teachingstaff
+) -> None:
+    try:
+        statement = (
+            select(TeachingStaff)
+            .where(TeachingStaff.email == teachingstaff_obj.email)
+            .where(TeachingStaff.is_active == 1)
+        )
+        teachingstaff_info = session_upd_teachingstaff.exec(statement).first()
+        update_fields = teachingstaff_obj.model_dump(exclude_unset=1)
+
+        for key, value in update_fields.items():
+            setattr(teachingstaff_info, key, value)
+
+        session_upd_teachingstaff.add(teachingstaff_info)
+        session_upd_teachingstaff.commit()
+        session_upd_teachingstaff.close()
+
+    except:
+        raise ValueError(f"Aucun apprenant avec l'email : {teachingstaff_obj}")

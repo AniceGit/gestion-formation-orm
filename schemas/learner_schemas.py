@@ -18,3 +18,13 @@ class LearnerCreate(us_sche.UserCreate):
         str_strip_whitespace = True
         str_to_lower = True
         frozen = True
+
+
+class LearnerUpdate(us_sche.UserUpdate):
+    study_level: Optional[str] = None  # unrequired field
+    phone: Optional[PhoneNumber] = None  # unrequired field
+
+    class Config:
+        str_strip_whitespace = True
+        str_to_lower = True
+        frozen = True

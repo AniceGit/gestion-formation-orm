@@ -3,10 +3,8 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.room import Room
-from schemas.room_schemas import RoomCreate
-from sqlmodel import select
-
-# region create
+from schemas.room_schemas import RoomCreate, RoomUpdate
+from sqlmodel import select, update
 
 
 def add_room(room_obj: RoomCreate, session_add_room) -> None:
@@ -31,13 +29,10 @@ def add_room(room_obj: RoomCreate, session_add_room) -> None:
 
 def get_all_rooms_as_create(session) -> list[RoomCreate]:
     try:
-        list_result = []
-        # list of all Room in session
-        rooms = session.query(Room).all()
-        # Conversion Room -> RoomCreate
-        for room in rooms:
-            create_room = RoomCreate(**room.model_dump())
-            list_result.append(create_room)
+        statement = select(Room).where(Room.is_active == True)
+        results = session.exec(statement).all()
+        all_room = [RoomCreate(**item.model_dump()) for item in results]
+        return all_room
     except Exception as exc:
         print("-" * 25)
         print("Erreur lors de la lecture des salles")
@@ -46,33 +41,37 @@ def get_all_rooms_as_create(session) -> list[RoomCreate]:
         return []
 
 
-# region delete
-
-
-def delete_room_by_attr(attri: str, value: any, session, is_active=True) -> bool:
+def del_room(name_room: int, session):
     try:
-        room = session.exec(select(Room)).filter(getattr(Room, attri) == value).first()
-        if room:
-            if is_active:
-                room.is_active = False
-                session.add(room)
-                session.commit()
-                print(f"Salle désactivée : {room.name}")
-                return True
-            else:
-                room_name = room.name
-                session.delete(room)
-                session.commit()
-                print(f"Salle supprimée : {room_name}")
-                return True
-        else:
-            print(
-                f"Aucune salle trouvée avec l'attribut: {attri} ayant la valeur : {value}"
-            )
-            return False
-    except Exception as exc:
-        print("-" * 25)
-        print("Erreur lors de la suppression de la salle")
-        print(f"Exception: {exc}")
-        print("-" * 25)
-        return False
+        statement = (
+            update(Room)
+            .where(Room.name == name_room)
+            .where(Room.is_active == 1)
+            .values(is_active=0)
+        )
+        session.exec(statement)
+        session.commit()
+        session.close()
+    except:
+        raise ValueError(f"Aucune salle avec le nom : {name_room}")
+
+
+def upd_room(learner_obj: RoomUpdate, session_upd_room) -> None:
+    try:
+        statement = (
+            select(Room)
+            .where(Room.name == learner_obj.name)
+            .where(Room.is_active == True)
+        )
+        room_info = session_upd_room.exec(statement).first()
+        update_fields = learner_obj.model_dump(exclude_unset=True)
+
+        for key, value in update_fields.items():
+            setattr(room_info, key, value)
+
+        session_upd_room.add(room_info)
+        session_upd_room.commit()
+        session_upd_room.close()
+
+    except:
+        raise ValueError(f"Aucun apprenant avec l'email : {learner_obj}")

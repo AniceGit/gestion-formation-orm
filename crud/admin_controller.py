@@ -4,7 +4,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.admin import Admin, AdminRole, AdminAdminRoleLink
 from schemas.admin_schemas import AdminCreate, AdminRoleCreate, AdminAdminRoleLinkCreate
-from sqlmodel import select
+from sqlmodel import select, update
 
 
 def add_admin(admin_obj: AdminCreate, session_add_admin) -> None:
@@ -32,7 +32,8 @@ def add_admin(admin_obj: AdminCreate, session_add_admin) -> None:
 
 
 def get_admin(session) -> AdminCreate:
-    results = session.exec(select(Admin)).all()
+    statement = select(Admin).where(Admin.is_active == True)
+    results = session.exec(statement).all()
     all_link = get_admin_adminrole_link(session)
 
     all_admin = []
@@ -73,3 +74,39 @@ def get_admin_adminrole_link(session) -> AdminAdminRoleLinkCreate:
     results = session.exec(select(AdminAdminRoleLink)).all()
     all_link = [AdminAdminRoleLinkCreate(**item.model_dump()) for item in results]
     return all_link
+
+
+def del_admin(email: str, session):
+    try:
+        statement = (
+            update(Admin)
+            .where(Admin.email == email)
+            .where(Admin.is_active == 1)
+            .values(is_active=0)
+        )
+        session.exec(statement)
+        session.commit()
+        session.close()
+    except:
+        raise ValueError(f"Aucun admin avec l'email : {email}")
+
+
+def upd_admin(admin_obj: Admin, session_upd_admin) -> None:
+    try:
+        statement = (
+            select(Admin)
+            .where(Admin.email == admin_obj.email)
+            .where(Admin.is_active == 1)
+        )
+        admin_info = session_upd_admin.exec(statement).first()
+        update_fields = admin_obj.model_dump(exclude_unset=1)
+
+        for key, value in update_fields.items():
+            setattr(admin_info, key, value)
+
+        session_upd_admin.add(admin_info)
+        session_upd_admin.commit()
+        session_upd_admin.close()
+
+    except:
+        raise ValueError(f"Aucun apprenant avec l'email : {admin_obj}")

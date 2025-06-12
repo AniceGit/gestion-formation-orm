@@ -3,7 +3,7 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.learner import Learner
-from sqlmodel import select
+from sqlmodel import select, update
 from schemas.learner_schemas import LearnerCreate
 
 # region create
@@ -31,42 +31,44 @@ def add_learner(learner_obj: LearnerCreate, session_add_learner) -> None:
 
 
 def get_learner(session) -> LearnerCreate:
-    results = session.exec(select(Learner)).all()
+    statement = select(Learner).where(Learner.is_active == True)
+    results = session.exec(statement).all()
     all_learner = [LearnerCreate(**item.model_dump()) for item in results]
+    print(f"_________________________ Learner = {all_learner}")
     return all_learner
 
 
-# region delete
-
-
-def delete_learner_by_attr(attri: str, value: any, session, is_active=True) -> bool:
+def del_learner(email: str, session):
     try:
-        learner = (
-            session.exec(select(Learner))
-            .filter(getattr(Learner, attri) == value)
-            .first()
+        statement = (
+            update(Learner)
+            .where(Learner.email == email)
+            .where(Learner.is_active == True)
+            .values(is_active=False)
         )
-        if learner:
-            if is_active:
-                learner.is_active = False
-                session.add(learner)  # Facultatif mais recommandé
-                session.commit()  # <-- Il faut commit ici !
-                print(f"Apprenant désactivé : {learner.name}")
-                return True
-            else:
-                learner_name = learner.name
-                session.delete(learner)
-                session.commit()
-                print(f"Apprenant supprimé : {learner_name}")
-                return True
-        else:
-            print(
-                f"Aucun apprenant trouvé avec l'attribut: {attri} ayant la valeur : {value}"
-            )
-            return False
-    except Exception as exc:
-        print("-" * 25)
-        print("Erreur lors de la suppression de l'apprenant'")
-        print(f"Exception: {exc}")
-        print("-" * 25)
-        return False
+        session.exec(statement)
+        session.commit()
+        session.close()
+    except:
+        raise ValueError(f"Aucun apprenant avec l'email : {email}")
+
+
+def upd_learner(learner_obj: LearnerCreate, session_upd_learner) -> None:
+    try:
+        statement = (
+            select(Learner)
+            .where(Learner.email == learner_obj.email)
+            .where(Learner.is_active == True)
+        )
+        learner_info = session_upd_learner.exec(statement).first()
+        update_fields = learner_obj.model_dump(exclude_unset=True)
+
+        for key, value in update_fields.items():
+            setattr(learner_info, key, value)
+
+        session_upd_learner.add(learner_info)
+        session_upd_learner.commit()
+        session_upd_learner.close()
+
+    except:
+        raise ValueError(f"Aucun apprenant avec l'email : {learner_obj}")

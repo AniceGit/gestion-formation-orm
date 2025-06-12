@@ -18,3 +18,13 @@ class TrainerCreate(us_sche.UserCreate):
         str_strip_whitespace = True
         str_to_lower = True
         frozen = True
+
+
+class TrainerUpdate(us_sche.UserUpdate):
+    speciality: Optional[str] = None
+    hourly_rate: Optional[float] = None
+
+    class Config:
+        str_strip_whitespace = True
+        str_to_lower = True
+        frozen = True

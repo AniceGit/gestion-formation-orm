@@ -7,6 +7,7 @@ from typing import Annotated
 from pydantic import BaseModel, EmailStr, StringConstraints, Field
 import datetime as date
 from dateutil.relativedelta import relativedelta
+from typing import Optional
 
 
 class UserCreate(BaseModel):
@@ -16,6 +17,17 @@ class UserCreate(BaseModel):
     birth_date: date.date = Field(None, le=date.date.today() - relativedelta(years=16))
     date_create: date.date
     role: UserRole = UserRole.trainer
+
+    class Config:
+        str_strip_whitespace = True
+        str_to_lower = True
+        frozen = True
+
+
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
+    firstname: Optional[str] = None
+    email: EmailStr = Field(unique=True)
 
     class Config:
         str_strip_whitespace = True
