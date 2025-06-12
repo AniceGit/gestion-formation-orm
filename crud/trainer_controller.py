@@ -39,10 +39,12 @@ def del_trainer(email: str, session):
         statement = (
             update(Trainer)
             .where(Trainer.email == email)
-            .where(Trainer.is_active == True)
-            .values(is_active=False)
+            .where(Trainer.is_active == 1)
+            .values(is_active=0)
         )
         session.exec(statement)
+        session.commit()
+        session.close()
     except:
         raise ValueError(f"Aucun  enseignant avec l'email : {email}")
 
@@ -52,10 +54,10 @@ def upd_trainer(trainer_obj: Trainer, session_upd_trainer) -> None:
         statement = (
             select(Trainer)
             .where(Trainer.email == trainer_obj.email)
-            .where(Trainer.is_active == True)
+            .where(Trainer.is_active == 1)
         )
         teachingstaff_info = session_upd_trainer.exec(statement).first()
-        update_fields = trainer_obj.model_dump(exclude_unset=True)
+        update_fields = trainer_obj.model_dump(exclude_unset=1)
 
         for key, value in update_fields.items():
             setattr(teachingstaff_info, key, value)

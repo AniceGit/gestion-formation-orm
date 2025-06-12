@@ -12,6 +12,7 @@ class InscriptionStatusEnum(str, Enum):
 
 
 class Inscription(SQLModel, table=True):
+    __table_args__ = {"extend_existing": True}
     id: int | None = Field(default=None, primary_key=True)
     inscription_date: datetime = Field(default=datetime.now())
     inscription_status: InscriptionStatusEnum

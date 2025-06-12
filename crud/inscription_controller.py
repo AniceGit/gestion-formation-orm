@@ -4,6 +4,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models.inscription import Inscription
 from schemas.inscription_schemas import InscriptionCreate
+from sqlmodel import select
 
 # region create
 
@@ -32,9 +33,10 @@ def add_inscription(
 
 def get_all_inscriptions_as_create(session) -> list[InscriptionCreate]:
     try:
+        statement = select(Inscription).where(Inscription.is_active == True)
         list_result = []
         # list of all Inscription in session
-        inscriptions = session.query(Inscription).all()
+        inscriptions = session.exec(statement).all()
         # Conversion Inscription -> InscriptionCreate
         for inscription in inscriptions:
             create_inscription = InscriptionCreate(**inscription.model_dump())

@@ -353,7 +353,7 @@ def delete_admin():
 def update_user():
     name = st.text_input("Insérer votre nom")
     firstname = st.text_input("Insérer votre prénom")
-    email = st.text_input("Insérer le mail de l'utilisateur à modifier")
+    email = st.text_input("Insérer le mail de l'utilisateur à modifier*")
 
     info_user_dict = {
         "name": name,

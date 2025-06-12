@@ -43,6 +43,8 @@ def del_learner(email: str, session):
             .values(is_active=False)
         )
         session.exec(statement)
+        session.commit()
+        session.close()
     except:
         raise ValueError(f"Aucun apprenant avec l'email : {email}")
 

@@ -41,10 +41,12 @@ def del_teachingstaff(email: str, session):
         statement = (
             update(TeachingStaff)
             .where(TeachingStaff.email == email)
-            .where(TeachingStaff.is_active == True)
-            .values(is_active=False)
+            .where(TeachingStaff.is_active == 1)
+            .values(is_active=0)
         )
         session.exec(statement)
+        session.commit()
+        session.close()
     except:
         raise ValueError(f"Aucun staff pédagogique avec l'email : {email}")
 
@@ -56,10 +58,10 @@ def upd_teachingstaff(
         statement = (
             select(TeachingStaff)
             .where(TeachingStaff.email == teachingstaff_obj.email)
-            .where(TeachingStaff.is_active == True)
+            .where(TeachingStaff.is_active == 1)
         )
         teachingstaff_info = session_upd_teachingstaff.exec(statement).first()
-        update_fields = teachingstaff_obj.model_dump(exclude_unset=True)
+        update_fields = teachingstaff_obj.model_dump(exclude_unset=1)
 
         for key, value in update_fields.items():
             setattr(teachingstaff_info, key, value)
