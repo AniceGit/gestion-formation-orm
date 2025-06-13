@@ -10,6 +10,19 @@ from schemas.learner_schemas import LearnerCreate
 
 
 def add_learner(learner_obj: LearnerCreate, session_add_learner) -> None:
+    """
+    Ajoute un apprenant à la base de données.
+
+    Args:
+        learner_obj (LearnerCreate): L'objet d'apprenant à ajouter.
+        session_add_learner: La session de base de données pour l'ajout.
+
+    Raises:
+        Exception: Si une erreur se produit lors de l'ajout de l'apprenant.
+
+    Returns:
+        None
+    """
     try:
         new_user = Learner(**learner_obj.model_dump())
 
@@ -31,6 +44,15 @@ def add_learner(learner_obj: LearnerCreate, session_add_learner) -> None:
 
 
 def get_learner(session) -> LearnerCreate:
+    """
+    Récupère tous les apprenants actifs de la base de données.
+
+    Args:
+        session: La session de base de données pour exécuter la requête.
+
+    Returns:
+        list[LearnerCreate]: Une liste d'objets LearnerCreate contenant les informations des apprenants.
+    """
     statement = select(Learner).where(Learner.is_active == True)
     results = session.exec(statement).all()
     all_learner = [LearnerCreate(**item.model_dump()) for item in results]
@@ -39,6 +61,19 @@ def get_learner(session) -> LearnerCreate:
 
 
 def del_learner(email: str, session):
+    """
+    Supprime un apprenant de la base de données en le marquant comme inactif.
+
+    Args:
+        email (str): L'email de l'apprenant à supprimer.
+        session: La session de base de données pour exécuter la requête.
+
+    Raises:
+        ValueError: Si aucun apprenant avec l'email spécifié n'est trouvé.
+
+    Returns:
+        None
+    """
     try:
         statement = (
             update(Learner)
@@ -54,6 +89,19 @@ def del_learner(email: str, session):
 
 
 def upd_learner(learner_obj: LearnerCreate, session_upd_learner) -> None:
+    """
+    Met à jour les informations d'un apprenant dans la base de données.
+
+    Args:
+        learner_obj (LearnerCreate): L'objet d'apprenant à mettre à jour.
+        session_upd_learner: La session de base de données pour la mise à jour.
+
+    Raises:
+        ValueError: Si aucun apprenant avec l'email spécifié n'est trouvé.
+
+    Returns:
+        None
+    """
     try:
         statement = (
             select(Learner)

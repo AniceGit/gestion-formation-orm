@@ -8,6 +8,19 @@ from sqlmodel import select, update
 
 
 def add_admin(admin_obj: AdminCreate, session_add_admin) -> None:
+    """
+    Ajoute un nouvel administrateur à la base de données.
+
+    Args:
+        admin_obj (AdminCreate): Un objet contenant les informations de l'administrateur à ajouter.
+        session_add_admin: Session de base de données pour ajouter l'administrateur.
+
+    Raises:
+        Exception: Si une erreur se produit lors de l'ajout de l'administrateur.
+
+    Returns:
+        None
+    """
     try:
         new_user = Admin(**admin_obj.model_dump())
 
@@ -32,6 +45,15 @@ def add_admin(admin_obj: AdminCreate, session_add_admin) -> None:
 
 
 def get_admin(session) -> AdminCreate:
+    """
+    Récupère tous les administrateurs actifs de la base de données.
+
+    Args:
+        session: Session de base de données pour exécuter la requête.
+
+    Returns:
+        list[AdminCreate]: Une liste d'objets AdminCreate contenant les informations des administrateurs.
+    """
     statement = select(Admin).where(Admin.is_active == True)
     results = session.exec(statement).all()
     all_link = get_admin_adminrole_link(session)
@@ -47,11 +69,33 @@ def get_admin(session) -> AdminCreate:
 
 
 def get_adminrole(session) -> dict[int, str]:
+    """
+    Récupère tous les rôles d'administrateur de la base de données.
+
+    Args:
+        session: Session de base de données pour exécuter la requête.
+
+    Returns:
+        dict[int, str]: Un dictionnaire où les clés sont les IDs des rôles et les valeurs sont les noms des rôles.
+    """
     results = session.exec(select(AdminRole)).all()
     return {role.id: role.name for role in results}
 
 
 def add_admin_role(admin_obj: AdminRoleCreate, session_add_admin_role) -> None:
+    """
+    Ajoute un nouveau rôle d'administrateur à la base de données.
+
+    Args:
+        admin_obj (AdminRoleCreate): Un objet contenant les informations du rôle d'administrateur à ajouter.
+        session_add_admin_role: Session de base de données pour ajouter le rôle d'administrateur.
+
+    Raises:
+        Exception: Si une erreur se produit lors de l'ajout du rôle d'administrateur.
+
+    Returns:
+        None
+    """
     try:
         new_admin_role = AdminRole(
             name=admin_obj.name,
@@ -71,12 +115,34 @@ def add_admin_role(admin_obj: AdminRoleCreate, session_add_admin_role) -> None:
 
 
 def get_admin_adminrole_link(session) -> AdminAdminRoleLinkCreate:
+    """
+    Récupère tous les liens entre les administrateurs et leurs rôles.
+
+    Args:
+        session: Session de base de données pour exécuter la requête.
+
+    Returns:
+        list[AdminAdminRoleLinkCreate]: Une liste d'objets AdminAdminRoleLinkCreate contenant les liens entre les administrateurs et leurs rôles.
+    """
     results = session.exec(select(AdminAdminRoleLink)).all()
     all_link = [AdminAdminRoleLinkCreate(**item.model_dump()) for item in results]
     return all_link
 
 
 def del_admin(email: str, session):
+    """
+    Supprime un administrateur de la base de données en le marquant comme inactif.
+
+    Args:
+        email (str): L'email de l'administrateur à supprimer.
+        session: Session de base de données pour exécuter la requête.
+
+    Raises:
+        ValueError: Si aucun administrateur avec l'email spécifié n'est trouvé.
+
+    Returns:
+        None
+    """
     try:
         statement = (
             update(Admin)
@@ -92,6 +158,19 @@ def del_admin(email: str, session):
 
 
 def upd_admin(admin_obj: Admin, session_upd_admin) -> None:
+    """
+    Met à jour les informations d'un administrateur dans la base de données.
+
+    Args:
+        admin_obj (Admin): Un objet contenant les informations mises à jour de l'administrateur.
+        session_upd_admin: Session de base de données pour mettre à jour l'administrateur.
+
+    Raises:
+        ValueError: Si aucun administrateur avec l'email spécifié n'est trouvé.
+
+    Returns:
+        None
+    """
     try:
         statement = (
             select(Admin)

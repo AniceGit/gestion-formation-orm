@@ -23,10 +23,19 @@ from models.teachingstaff import TeachingStaffRole as teachstaff_role
 
 
 def connect_to_session():
+    """
+    Connection à la base de données et création d'une session.
+
+    Returns:
+        Session: Une instance de la session SQLAlchemy connectée à la base de données.
+    """
     return Session(engine)
 
 
 def main():
+    """
+    Fonction principale pour initialiser la base de données et insérer des données de test.
+    """
     session = connect_to_session()
 
     # Users creation

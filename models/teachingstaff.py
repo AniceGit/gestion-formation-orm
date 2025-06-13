@@ -7,11 +7,15 @@ import models.user as u
 
 
 class TeachingStaffRole(str, Enum):
+    """Enumération pour les rôles du personnel enseignant"""
+
     EDUCATIONAL_MANAGER = "RESPONSABLE PEDAGOGIQUE"
     PROJECT_HANDLER = "CHARGEE DE PROJET"
 
 
 class TeachingStaff(u.User, table=True):
+    """Modèle pour le personnel enseignant, hérite de User"""
+
     __tablename__ = "teaching_staff"
     __table_args__ = {"extend_existing": True}
     work: TeachingStaffRole  # required field

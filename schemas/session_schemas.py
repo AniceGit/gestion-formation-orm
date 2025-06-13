@@ -5,12 +5,16 @@ from enum import Enum
 
 
 class StatusEnum(str, Enum):
+    """Enumération pour les statuts des sessions"""
+
     OPEN = "OPEN"
     CLOSED = "CLOSED"
     ARCHIVED = "ARCHIVED"
 
 
 class SessionCreate(BaseModel):
+    """Modèle pour la création d'une session de formation"""
+
     title: str
     description: Optional[str] = None
     start_date: date

@@ -2,6 +2,7 @@ import streamlit as st
 
 
 def display():
+    """Affiche la page d'accueil du site."""
     st.set_page_config(layout="wide")
     # Display the title
     st.title(
@@ -30,6 +31,7 @@ def display():
 
 
 def is_submit_button_compris(submit_button: bool):
+    """Affiche un message de succès si le bouton de soumission est cliqué."""
     if submit_button:
         st.success("Bonne navigation sur le site !")
 

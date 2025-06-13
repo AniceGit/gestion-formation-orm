@@ -31,6 +31,15 @@ faker = fk.Faker()
 
 # function used several times
 def random_element_list(liste):
+    """
+    Retourne un élément aléatoire d'une liste donnée.
+
+    Args:
+        liste (list): La liste à partir de laquelle un élément sera sélectionné.
+
+    Returns:
+        any: Un élément aléatoire de la liste.
+    """
     return liste[faker.pyint(0, len(liste) - 1)]
 
 
@@ -39,6 +48,12 @@ def random_element_list(liste):
 
 # create a dict to be injected in child class
 def generate_fake_user() -> dict[str, any]:
+    """
+    Génère des données utilisateur factices.
+
+    Returns:
+        dict[str, any]: Un dictionnaire contenant des informations utilisateur factices.
+    """
     user_data = {
         "name": faker.name(),
         "firstname": faker.first_name(),
@@ -56,6 +71,16 @@ def generate_fake_user() -> dict[str, any]:
 def generate_fake_admin(
     nb_admins: int = NBR_ADMIN, liste_role_admin=LISTE_ROLES_ADMIN
 ) -> list[AdminCreate]:
+    """
+    Génère une liste d'administrateurs factices.
+
+    Args:
+        nb_admins (int): Le nombre d'administrateurs à générer.
+        liste_role_admin (list): La liste des rôles d'administrateur disponibles.
+
+    Returns:
+        list[AdminCreate]: Une liste d'objets AdminCreate contenant les informations des administrateurs.
+    """
     list_result = []
     list_id = list(range(1, len(liste_role_admin) + 1))
     for _ in range(nb_admins):
@@ -83,8 +108,14 @@ def generate_fake_adminadmin(
     liste_role_admin=LISTE_ROLES_ADMIN, nb_admins: int = NBR_ADMIN
 ) -> list[AdminAdminRoleLinkCreate]:
     """
-    tous les admins doivent être dedans
-    certains ont plusieurs roles
+    Génère une liste de liaisons entre les administrateurs et leurs rôles.
+
+    Args:
+        liste_role_admin (list): La liste des rôles d'administrateur disponibles.
+        nb_admins (int): Le nombre d'administrateurs à générer des liaisons.
+
+    Returns:
+        list[AdminAdminRoleLinkCreate]: Une liste d'objets AdminAdminRoleLinkCreate contenant les liaisons entre les administrateurs et leurs rôles.
     """
     list_result = []
     list_id = list(range(1, len(liste_role_admin) + 1))
@@ -107,6 +138,15 @@ liste_adminadmin = generate_fake_adminadmin()
 def generate_fake_inscription(
     nb_inscriptions: int = NBR_INSCRIPTION,
 ) -> list[InscriptionCreate]:
+    """
+    Génère une liste d'inscriptions factices.
+
+    Args:
+        nb_inscriptions (int): Le nombre d'inscriptions à générer.
+
+    Returns:
+        list[InscriptionCreate]: Une liste d'objets InscriptionCreate contenant les informations des inscriptions.
+    """
     list_result = []
     list_status = ["ENREGISTRE", "DESINSCRIT", "EN_ATTENTE"]
     for _ in range(nb_inscriptions):
@@ -129,6 +169,12 @@ liste_inscription = generate_fake_inscription()
 
 # create a valid phone number for pydantic
 def generate_valid_french_mobile():
+    """
+    Génère un numéro de téléphone mobile français valide.
+
+    Returns:
+        str: Un numéro de téléphone mobile français valide au format international.
+    """
     # for french nuber, start by 6 or 7
     first_digit = faker.random_element(elements=("6", "7"))
     rest = faker.numerify("########")  # 8 numbers
@@ -144,6 +190,15 @@ def generate_valid_french_mobile():
 
 
 def generate_fake_learner(nb_learners=NBR_LEARNER):
+    """
+    Génère une liste d'apprenants factices.
+
+    Args:
+        nb_learners (int): Le nombre d'apprenants à générer.
+
+    Returns:
+        list[LearnerCreate]: Une liste d'objets LearnerCreate contenant les informations des apprenants.
+    """
     list_result = []
     for _ in range(nb_learners):
         phone = generate_valid_french_mobile()
@@ -167,6 +222,16 @@ liste_learner = generate_fake_learner()
 
 
 def generate_fake_room(nb_rooms=NBR_ROOM, stuff_dict=STUFF_DICT):
+    """
+    Génère une liste de salles factices.
+
+    Args:
+        nb_rooms (int): Le nombre de salles à générer.
+        stuff_dict (dict): Un dictionnaire contenant les équipements des salles.
+
+    Returns:
+        list[RoomCreate]: Une liste d'objets RoomCreate contenant les informations des salles.
+    """
     list_result = []
     for _ in range(nb_rooms):
         for key in stuff_dict.keys():
@@ -188,6 +253,15 @@ liste_room = generate_fake_room()
 
 
 def generate_fake_session(nb_sessions=NBR_SESSION):
+    """
+    Génère une liste de sessions factices.
+
+    Args:
+        nb_sessions (int): Le nombre de sessions à générer.
+
+    Returns:
+        list[SessionCreate]: Une liste d'objets SessionCreate contenant les informations des sessions.
+    """
     list_result = []
     list_status = ["OPEN", "CLOSED", "ARCHIVED"]
     for _ in range(nb_sessions):
@@ -223,6 +297,16 @@ liste_session = generate_fake_session()
 def generate_fake_teachingstaff(
     nb_teachingstaff=NBR_TEACHINGSTAFF, dict_responsibilities=STAFF_RESPONSIBILITIES
 ):
+    """
+    Génère une liste de membres du personnel enseignant factices.
+
+    Args:
+        nb_teachingstaff (int): Le nombre de membres du personnel enseignant à générer.
+        dict_responsibilities (dict): Un dictionnaire contenant les responsabilités des membres du personnel enseignant.
+
+    Returns:
+        list[TeachingStaffCreate]: Une liste d'objets TeachingStaffCreate contenant les informations des membres du personnel enseignant.
+    """
     list_result = []
     list_role = ["RESPONSABLE PEDAGOGIQUE", "RESPONSABLE PEDAGOGIQUE"]
     for _ in range(nb_teachingstaff):
@@ -247,6 +331,15 @@ list_teachingstaff = generate_fake_teachingstaff()
 
 
 def generate_fake_trainer(nb_trainers=NBR_TRAINER):
+    """
+    Génère une liste de formateurs factices.
+
+    Args:
+        nb_trainers (int): Le nombre de formateurs à générer.
+
+    Returns:
+        list[TrainerCreate]: Une liste d'objets TrainerCreate contenant les informations des formateurs.
+    """
     list_result = []
     for _ in range(nb_trainers):
         user_attributes = generate_fake_user()

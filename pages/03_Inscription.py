@@ -17,6 +17,7 @@ from sqlmodel import Session
 
 
 def display():
+    """Affiche la page des inscriptions"""
     st.set_page_config(page_title="Inscription")
 
     st.title("Page de formation")
@@ -32,6 +33,7 @@ def display():
 
 
 def define_choice(crud_choice: str):
+    """Définit l'action à effectuer en fonction du choix de l'utilisateur"""
     if crud_choice == "Créer":
         st.subheader("Création d'une nouvelle formation")
         new_inscription()
@@ -48,11 +50,13 @@ def define_choice(crud_choice: str):
 
 # Connect to Session
 def connect_to_session():
+    """Connection à la base de données"""
     return Session(engine)
 
 
 # Create
 def define_inscription():
+    """Définit les informations de l'inscription"""
     title = st.text_input("Insérer l'intitulé")
     description = st.text_area("Insérer la description de l'inscription")
     start_date = st.date_input(
@@ -75,13 +79,14 @@ def define_inscription():
 
 
 def new_inscription():
+    """Création d'une nouvelle inscription"""
     requires = st.number_input("Nombre d'exigences", min_value=0, max_value=10, value=0)
     with st.form("create_inscription"):
         info_room_dict = define_inscription()
         status = inscription_sch.InscriptionStatusEnum.ENREGISTRE
         require_list = []
         for i in range(requires):
-            key = st.text_input(f"Type de poste #{i+1}", key=f"key_{i}")
+            key = st.text_input(f"Type de poste #{i + 1}", key=f"key_{i}")
             if key:
                 require_list.append(key)
         info_room_dict["status"] = status
@@ -110,6 +115,7 @@ def new_inscription():
 
 # Read
 def show_inscription():
+    """Affichage des inscriptions"""
     st.image("./assets/coming_soon1.gif")
     st.write(
         "Coming soon n’est pas une promesse, c’est un silence chargé d’avenir. "
@@ -119,6 +125,7 @@ def show_inscription():
 
 # Update
 def update_inscription():
+    """Modification d'une inscription"""
     st.image("./assets/coming_soon1.gif")
     st.write(
         "Coming soon n’est pas une promesse, c’est un silence chargé d’avenir. "
@@ -128,6 +135,7 @@ def update_inscription():
 
 # Delete
 def delete_inscription():
+    """Suppression d'une inscription"""
     st.image("./assets/coming_soon1.gif")
     st.write(
         "Coming soon n’est pas une promesse, c’est un silence chargé d’avenir. "

@@ -50,10 +50,15 @@ def display():
 
 
 def define_choice(choice_role: str, crud_choice: str):
-    """_summary_
+    """
+    Définit les actions à effectuer en fonction du rôle et de l'option CRUD choisie.
 
     Args:
-        choice_role (int): _description_
+        choice_role (str): Le rôle de l'utilisateur (Learner, Trainer, TeachingStaff, Admin).
+        crud_choice (str): L'option CRUD choisie (Créer, Afficher, Modifier, Supprimer).
+
+    Returns:
+        None
     """
     if choice_role == "Learner":
         if crud_choice == "Créer":
@@ -111,11 +116,17 @@ def define_choice(choice_role: str, crud_choice: str):
 
 # Connect to Session
 def connect_to_session():
+    """Connection à la session de la base de données."""
     return Session(engine)
 
 
 # Create
 def new_user():
+    """Crée un nouveau dictionnaire d'informations utilisateur.
+
+    Returns:
+        dict: Un dictionnaire contenant les informations de l'utilisateur.
+    """
     name = st.text_input("Insérer votre nom")
     firstname = st.text_input("Insérer votre prénom")
     email = st.text_input("Insérer votre email")
@@ -135,6 +146,7 @@ def new_user():
 
 
 def new_learner():
+    """Crée un nouveau dictionnaire d'informations pour un apprenant."""
     with st.form("create_user"):
         info_user_dict = new_user()
         role = "Learner"
@@ -164,6 +176,7 @@ def new_learner():
 
 
 def new_trainer():
+    """Crée un nouveau dictionnaire d'informations pour un enseignant."""
     with st.form("create_user"):
         info_user_dict = new_user()
         role = "Learner"
@@ -190,6 +203,7 @@ def new_trainer():
 
 
 def new_teachingstaff():
+    """Crée un nouveau dictionnaire d'informations pour un membre du personnel pédagogique."""
     nb_resp = st.number_input(
         "Nombre de responsabilités", min_value=0, max_value=10, value=0
     )
@@ -203,8 +217,8 @@ def new_teachingstaff():
         date_appointement = dt.date.today()
         responsabilities = {}
         for i in range(nb_resp):
-            key = st.text_input(f"Type de poste #{i+1}", key=f"key_{i}")
-            value = st.text_input(f"Poste #{i+1}", key=f"value_{i}")
+            key = st.text_input(f"Type de poste #{i + 1}", key=f"key_{i}")
+            value = st.text_input(f"Poste #{i + 1}", key=f"value_{i}")
             if key:
                 responsabilities[key] = value
         submit_coo = st.form_submit_button("Valider")
@@ -224,6 +238,7 @@ def new_teachingstaff():
 
 
 def new_admin():
+    """Crée un nouveau dictionnaire d'informations pour un administrateur."""
     with st.form("create_user"):
         info_user_dict = new_user()
         role = "Admin"
@@ -256,6 +271,7 @@ def new_admin():
 
 # Read
 def show_learner():
+    """Affiche les informations des apprenants."""
     learners = learn_contr.get_learner(connect_to_session())
     for learner in learners:
         with st.expander(f"{learner.firstname} {learner.name}"):
@@ -268,6 +284,7 @@ def show_learner():
 
 
 def show_trainer():
+    """Affiche les informations des enseignants."""
     trainers = train_contr.get_trainer(connect_to_session())
     for trainer in trainers:
         with st.expander(f"{trainer.firstname} {trainer.name}"):
@@ -278,6 +295,7 @@ def show_trainer():
 
 
 def show_teachingstaff():
+    """Affiche les informations des membres du personnel pédagogique."""
     admins = teachstaff_contr.get_teachingstaff(connect_to_session())
     for admin in admins:
         with st.expander(f"{admin.firstname} {admin.name}"):
@@ -287,6 +305,7 @@ def show_teachingstaff():
 
 
 def show_admin():
+    """Affiche les informations des administrateurs."""
     admins = admin_contr.get_admin(connect_to_session())
     for admin in admins:
         with st.expander(f"{admin.firstname} {admin.name}"):
@@ -298,6 +317,7 @@ def show_admin():
 
 # Delete
 def delete_learner():
+    """Supprime un apprenant en le marquant comme inactif."""
     with st.form("delete_user"):
         email = st.text_input("Insérer votre email")
         submit_coo = st.form_submit_button("Valider")
@@ -311,6 +331,7 @@ def delete_learner():
 
 
 def delete_trainer():
+    """Supprime un enseignant en le marquant comme inactif."""
     with st.form("delete_user"):
         email = st.text_input("Insérer votre email")
         submit_coo = st.form_submit_button("Valider")
@@ -324,6 +345,7 @@ def delete_trainer():
 
 
 def delete_teachingstaff():
+    """Supprime un membre du personnel pédagogique en le marquant comme inactif."""
     with st.form("delete_user"):
         email = st.text_input("Insérer votre email")
         submit_coo = st.form_submit_button("Valider")
@@ -337,6 +359,7 @@ def delete_teachingstaff():
 
 
 def delete_admin():
+    """Supprime un administrateur en le marquant comme inactif."""
     with st.form("delete_user"):
         email = st.text_input("Insérer votre email")
         submit_coo = st.form_submit_button("Valider")
@@ -351,6 +374,11 @@ def delete_admin():
 
 # Update
 def update_user():
+    """Crée un nouveau dictionnaire d'informations utilisateur pour la mise à jour.
+
+    Returns:
+        dict: Un dictionnaire contenant les informations de l'utilisateur à mettre à jour.
+    """
     name = st.text_input("Insérer votre nom")
     firstname = st.text_input("Insérer votre prénom")
     email = st.text_input("Insérer le mail de l'utilisateur à modifier*")
@@ -364,6 +392,7 @@ def update_user():
 
 
 def update_learner():
+    """Met à jour les informations d'un apprenant."""
     with st.form("create_user"):
         info_user_dict = new_user()
         study_levels = []
@@ -389,6 +418,7 @@ def update_learner():
 
 
 def update_trainer():
+    """Met à jour les informations d'un enseignant."""
     with st.form("create_user"):
         info_user_dict = new_user()
         speciality = st.text_input("Insérer votre spécialité")
@@ -408,6 +438,7 @@ def update_trainer():
 
 
 def update_teachingstaff():
+    """Met à jour les informations d'un membre du personnel pédagogique."""
     with st.form("create_user"):
         info_user_dict = new_user()
         options_work = [work.value for work in TeachingStaffRole]
@@ -428,6 +459,7 @@ def update_teachingstaff():
 
 
 def update_admin():
+    """Met à jour les informations d'un administrateur."""
     with st.form("create_user"):
         info_user_dict = new_user()
         submit_coo = st.form_submit_button("Valider")

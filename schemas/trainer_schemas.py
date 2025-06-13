@@ -9,6 +9,8 @@ import datetime as date
 
 
 class TrainerCreate(us_sche.UserCreate):
+    """Schema pour créer un entraîneur."""
+
     speciality: str
     date_hire: date.date = Field(None, le=date.date.today())
     hourly_rate: Annotated[float, Field(ge=0.0)]
@@ -21,6 +23,8 @@ class TrainerCreate(us_sche.UserCreate):
 
 
 class TrainerUpdate(us_sche.UserUpdate):
+    """Schema pour mettre à jour un entraîneur."""
+
     speciality: Optional[str] = None
     hourly_rate: Optional[float] = None
 
