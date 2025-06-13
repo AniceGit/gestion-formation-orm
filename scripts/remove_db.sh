@@ -1,0 +1,1 @@
+rm ./db/gestion-formation.db

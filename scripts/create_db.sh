@@ -1,0 +1,1 @@
+python3 ./db/create_db.py
